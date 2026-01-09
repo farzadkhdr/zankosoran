@@ -570,6 +570,26 @@
             border: 3px solid var(--primary-color);
         }
 
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), #2a7de9);
+        }
+
+        .student-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         /* Search Box */
         .search-container {
             position: relative;
@@ -713,9 +733,40 @@
             margin-bottom: 10px;
         }
 
+        .student-image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid var(--primary-color);
+            margin: 0 auto 10px;
+        }
+
+        .student-image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .student-image-container p {
             font-size: 0.9rem;
             color: #666;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary-color);
+            margin-top: 10px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Footer */
@@ -995,7 +1046,7 @@
                                 </tr>
                             </thead>
                             <tbody id="fullStudentTableBody">
-                                <!-- داتاکان لە ڕێگەی جاڤا سکریپتەوە دەخرێتە ناوەوە -->
+                                <!-- داتاکان لە ڕێگەی جاڤاسکریپتەوە دەخرێتە ناوەوە -->
                             </tbody>
                         </table>
                     </div>
@@ -1143,10 +1194,12 @@
                                 <div class="form-group">
                                     <label for="studentImage">وێنەی قوتابی</label>
                                     <input type="file" id="studentImage" class="form-control" accept="image/*">
+                                    <div id="studentImagePreview" class="image-preview"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="certificateImage">وێنەی شەهادە</label>
                                     <input type="file" id="certificateImage" class="form-control" accept="image/*">
+                                    <div id="certificateImagePreview" class="image-preview"></div>
                                 </div>
                             </div>
                             <div class="form-actions">
@@ -1279,6 +1332,8 @@
     <script>
         // زانیاریەکانی قوتابیان - لە سفرەوە دەست پێدەکات
         let sampleStudents = [];
+        let currentStudentImage = null;
+        let currentCertificateImage = null;
 
         // دەستپێکردنی سیستەم
         document.addEventListener('DOMContentLoaded', function() {
@@ -1333,6 +1388,16 @@
                     // پاککردنەوەی فۆرمەکان
                     document.getElementById('loginForm').reset();
                 }, 500);
+            });
+
+            // مامەڵەکردن لەگەڵ وێنەی قوتابی
+            document.getElementById('studentImage').addEventListener('change', function(e) {
+                handleImageUpload(e, 'studentImagePreview');
+            });
+
+            // مامەڵەکردن لەگەڵ وێنەی شەهادە
+            document.getElementById('certificateImage').addEventListener('change', function(e) {
+                handleImageUpload(e, 'certificateImagePreview');
             });
 
             // سووبمێنوی قوتابیان
@@ -1443,14 +1508,30 @@
                     phone: document.getElementById('studentPhone').value,
                     fatherPhone: document.getElementById('fatherPhone').value,
                     address: document.getElementById('studentAddress').value,
-                    blood: document.getElementById('bloodGroup').value,
-                    img: document.getElementById('studentName').value.charAt(0)
+                    blood: document.getElementById('bloodGroup').value
                 };
+                
+                // زیادکردنی وێنەکان
+                if (currentStudentImage) {
+                    studentData.image = currentStudentImage;
+                }
+                
+                if (currentCertificateImage) {
+                    studentData.certificateImage = currentCertificateImage;
+                }
                 
                 if (isEditMode) {
                     // دەستکاری قوتابی
                     const index = sampleStudents.findIndex(s => s.id === parseInt(studentId));
                     if (index !== -1) {
+                        // پاراستنی وێنەکان ئەگەر نوێ نەکرابنەوە
+                        if (!studentData.image && sampleStudents[index].image) {
+                            studentData.image = sampleStudents[index].image;
+                        }
+                        if (!studentData.certificateImage && sampleStudents[index].certificateImage) {
+                            studentData.certificateImage = sampleStudents[index].certificateImage;
+                        }
+                        
                         studentData.id = parseInt(studentId);
                         sampleStudents[index] = studentData;
                         alert(`زانیاری قوتابی "${studentData.name}" بە سەرکەوتوویی نوێکرایەوە`);
@@ -1462,17 +1543,12 @@
                 }
                 
                 // پاککردنەوەی فۆرم و نوێکردنەوەی لیستەکان
-                this.reset();
-                document.getElementById('editStudentId').value = '';
-                document.getElementById('submitStudentBtn').textContent = 'تۆمارکردنی قوتابی';
+                resetStudentForm();
                 populateStudentTables();
             });
 
             // دوگمەی پاککردنەوەی فۆرم
-            document.getElementById('resetFormBtn').addEventListener('click', function() {
-                document.getElementById('editStudentId').value = '';
-                document.getElementById('submitStudentBtn').textContent = 'تۆمارکردنی قوتابی';
-            });
+            document.getElementById('resetFormBtn').addEventListener('click', resetStudentForm);
 
             // زیادکردنی غیابات
             document.getElementById('attendanceForm').addEventListener('submit', function(e) {
@@ -1495,14 +1571,66 @@
                 document.getElementById('add-student').classList.add('active');
                 
                 // پاککردنەوەی فۆرم
-                document.getElementById('addStudentForm').reset();
-                document.getElementById('editStudentId').value = '';
-                document.getElementById('submitStudentBtn').textContent = 'تۆمارکردنی قوتابی';
+                resetStudentForm();
             });
         });
 
         // فەنکشنەکانی بەڕێوەبردنی قوتابیان
         
+        // فەنکشن بۆ مامەڵەکردن لەگەڵ وێنە
+        function handleImageUpload(event, previewId) {
+            const file = event.target.files[0];
+            const preview = document.getElementById(previewId);
+            
+            if (file) {
+                // پێکردنی جۆری وێنە
+                if (!file.type.match('image.*')) {
+                    alert('تکایە تەنها فایلی وێنە هەڵبژێرە!');
+                    event.target.value = '';
+                    return;
+                }
+                
+                // پێکردنی قەبارەی فایل (زیاتر لە 5MB نەبێت)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('قەبارەی وێنە نابێت لە 5MB زیاتر بێت!');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // پاشەکەوتکردنی وێنە
+                    if (previewId === 'studentImagePreview') {
+                        currentStudentImage = e.target.result;
+                    } else if (previewId === 'certificateImagePreview') {
+                        currentCertificateImage = e.target.result;
+                    }
+                    
+                    // پێشاندانی وێنە
+                    preview.innerHTML = `<img src="${e.target.result}" alt="وێنەی پێشبینیکراو">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
+                if (previewId === 'studentImagePreview') {
+                    currentStudentImage = null;
+                } else if (previewId === 'certificateImagePreview') {
+                    currentCertificateImage = null;
+                }
+            }
+        }
+
+        // پاککردنەوەی فۆرمی قوتابی
+        function resetStudentForm() {
+            document.getElementById('addStudentForm').reset();
+            document.getElementById('editStudentId').value = '';
+            document.getElementById('submitStudentBtn').textContent = 'تۆمارکردنی قوتابی';
+            document.getElementById('studentImagePreview').innerHTML = '';
+            document.getElementById('certificateImagePreview').innerHTML = '';
+            currentStudentImage = null;
+            currentCertificateImage = null;
+        }
+
         // زیادکردنی قوتابی نوێ
         function addStudent(studentData) {
             // زیادکردنی ID بۆ قوتابی نوێ
@@ -1533,13 +1661,20 @@
             const recentStudents = sampleStudents.slice(-4).reverse();
             
             recentStudents.forEach(student => {
+                // دروستکردنی وێنەی قوتابی
+                const avatarHTML = student.image ? 
+                    `<div class="student-avatar" data-student-id="${student.id}">
+                        <img src="${student.image}" alt="${student.name}">
+                    </div>` :
+                    `<div class="student-avatar" data-student-id="${student.id}" style="background: linear-gradient(135deg, #1a5fb4, #2a7de9);">
+                        ${student.name.charAt(0)}
+                    </div>`;
+                
                 // بۆ داشبۆرد
                 const row1 = document.createElement('tr');
                 row1.innerHTML = `
                     <td>
-                        <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #1a5fb4; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                            ${student.img}
-                        </div>
+                        ${avatarHTML}
                     </td>
                     <td>${student.name}</td>
                     <td>${student.age}</td>
@@ -1561,12 +1696,18 @@
             
             // بۆ پەڕەی قوتابیان (هەموو قوتابیەکان)
             sampleStudents.forEach(student => {
+                const avatarHTML = student.image ? 
+                    `<div class="student-avatar" data-student-id="${student.id}">
+                        <img src="${student.image}" alt="${student.name}">
+                    </div>` :
+                    `<div class="student-avatar" data-student-id="${student.id}" style="background: linear-gradient(135deg, #1a5fb4, #2a7de9);">
+                        ${student.name.charAt(0)}
+                    </div>`;
+                
                 const row2 = document.createElement('tr');
                 row2.innerHTML = `
                     <td>
-                        <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #1a5fb4; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                            ${student.img}
-                        </div>
+                        ${avatarHTML}
                     </td>
                     <td>${student.name}</td>
                     <td>${student.father}</td>
@@ -1617,6 +1758,22 @@
                 const parent = document.getElementById('studentSubmenu');
                 parent.classList.add('active');
                 
+                // دروستکردنی وێنەی قوتابی
+                const studentImageHTML = student.image ? 
+                    `<div class="student-image-preview">
+                        <img src="${student.image}" alt="وێنەی قوتابی">
+                     </div>` :
+                    `<div style="width: 150px; height: 150px; background: linear-gradient(135deg, #1a5fb4, #2a7de9); color: white; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; border-radius: 10px; margin: 0 auto 10px;">
+                        ${student.name.charAt(0)}
+                     </div>`;
+                
+                // دروستکردنی وێنەی شەهادە
+                const certificateImageHTML = student.certificateImage ? 
+                    `<div class="student-image-preview">
+                        <img src="${student.certificateImage}" alt="وێنەی شەهادە">
+                     </div>` :
+                    `<img src="https://via.placeholder.com/150x150/e5a50a/ffffff?text=شەهادە" alt="وێنەی شەهادە">`;
+                
                 // پڕکردنەوەی زانیاری قوتابی
                 const studentDetailsContainer = document.getElementById('studentDetailsContainer');
                 studentDetailsContainer.innerHTML = `
@@ -1652,13 +1809,11 @@
                         </div>
                         <div class="student-images">
                             <div class="student-image-container">
-                                <div style="width: 150px; height: 150px; background: linear-gradient(135deg, #1a5fb4, #2a7de9); color: white; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; border-radius: 10px; margin: 0 auto 10px;">
-                                    ${student.img}
-                                </div>
+                                ${studentImageHTML}
                                 <p>وێنەی قوتابی</p>
                             </div>
                             <div class="student-image-container">
-                                <img src="https://via.placeholder.com/150x150/e5a50a/ffffff?text=شەهادە" alt="وێنەی شەهادە">
+                                ${certificateImageHTML}
                                 <p>وێنەی شەهادە</p>
                             </div>
                         </div>
@@ -1726,6 +1881,17 @@
                 document.getElementById('fatherPhone').value = student.fatherPhone || student.phone;
                 document.getElementById('studentAddress').value = student.address || '';
                 document.getElementById('bloodGroup').value = student.blood;
+                
+                // پێشاندانی وێنەکان ئەگەر بوونیان هەبێت
+                if (student.image) {
+                    currentStudentImage = student.image;
+                    document.getElementById('studentImagePreview').innerHTML = `<img src="${student.image}" alt="وێنەی قوتابی">`;
+                }
+                
+                if (student.certificateImage) {
+                    currentCertificateImage = student.certificateImage;
+                    document.getElementById('certificateImagePreview').innerHTML = `<img src="${student.certificateImage}" alt="وێنەی شەهادە">`;
+                }
                 
                 // گۆڕینی دوگمەی فۆرم
                 document.getElementById('submitStudentBtn').textContent = 'نوێکردنەوەی قوتابی';
