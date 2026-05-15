@@ -1,237 +1,505 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ckb" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سیستەمی بەڕێوەبردی عیادە</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ڕۆژی لەدایکبوونت پیرۆز</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f0d78c;
+            --deep-space: #0a0a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep-space);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Naskh Arabic', 'Tahoma', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            cursor: default;
+            padding: 20px;
+        }
+
+        /* ئاسمانی پڕ ئەستێرە */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+                box-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+            }
+            25% {
+                opacity: 0.9;
+                transform: scale(1.4);
+                box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px var(--gold-light);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(1);
+                box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+            }
+            75% {
+                opacity: 0.7;
+                transform: scale(1.2);
+                box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+            border-radius: 50%;
+            animation: shoot var(--shoot-duration) linear infinite;
+            animation-delay: var(--shoot-delay);
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px) translateX(0) rotate(-25deg);
+            }
+            5% {
+                opacity: 1;
+            }
+            15% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(300px) rotate(-25deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(300px) rotate(-25deg);
+            }
+        }
+
+        /* ناوچەی سەرەکی */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        /* دەقی سەرەکی */
+        .love-text {
+            color: #e0d5c1;
+            font-size: 1.5rem;
+            line-height: 2.4;
+            text-align: justify;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            background: rgba(10, 10, 30, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 60px;
+            min-height: 200px;
+        }
+
+        .word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: wordAppear 0.8s ease forwards;
+            animation-delay: var(--word-delay);
+            margin: 0 3px;
+            transition: all 0.3s ease;
+        }
+
+        .word:hover {
+            color: var(--gold-light);
+            text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold);
+            transform: scale(1.1);
+            cursor: default;
+        }
+
+        @keyframes wordAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(4px);
+            }
+            60% {
+                opacity: 0.8;
+                transform: translateY(-3px);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* دەقی مەرگ جوان */
+        .death-text {
+            font-size: 5rem;
+            font-weight: 700;
+            color: transparent;
+            background: linear-gradient(135deg, 
+                #d4af37 0%, 
+                #f0d78c 20%, 
+                #fff 30%, 
+                #d4af37 45%, 
+                #b8942e 60%, 
+                #f0d78c 75%, 
+                #d4af37 100%
+            );
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: goldShimmer 3s ease-in-out infinite;
+            text-shadow: none;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.6));
+            letter-spacing: 8px;
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            animation: goldShimmer 3s ease-in-out infinite, fadeInDeath 2s ease forwards;
+            animation-delay: 0s, 28s;
+            cursor: default;
+            transition: all 0.5s ease;
+            user-select: none;
+        }
+
+        .death-text:hover {
+            filter: drop-shadow(0 0 50px rgba(212, 175, 55, 1)) drop-shadow(0 0 100px rgba(240, 215, 140, 0.8));
+            transform: scale(1.05);
+        }
+
+        @keyframes goldShimmer {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
+        @keyframes fadeInDeath {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.03);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* پەڵە ڕووناکییەکان */
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: nebulaFloat 12s ease-in-out infinite;
+        }
+
+        .nebula-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #d4af37 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .nebula-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #8b6914 0%, transparent 70%);
+            bottom: -80px;
+            left: -80px;
+            animation-delay: -6s;
+        }
+
+        @keyframes nebulaFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.95);
+            }
+        }
+
+        /* دیزاینی ڕیسپۆنسیڤ */
+        @media (max-width: 768px) {
+            .love-text {
+                font-size: 1.1rem;
+                padding: 25px 18px;
+                line-height: 2.2;
+                border-radius: 15px;
+            }
+
+            .death-text {
+                font-size: 3rem;
+                letter-spacing: 4px;
+            }
+
+            .word {
+                margin: 0 1px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .love-text {
+                font-size: 0.95rem;
+                padding: 20px 14px;
+                line-height: 2;
+                border-radius: 12px;
+            }
+
+            .death-text {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* کرۆسەری تایبەت */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.8), transparent);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+        }
+    </style>
 </head>
 <body>
-    <!-- بارەگەی سەرەوە -->
-    <header>
-        <div class="container">
-            <div class="logo">
-                <i class="fas fa-hospital"></i>
-                <h1>سیستەمی بەڕێوەبردی عیادە</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" onclick="showSection('dashboard')"><i class="fas fa-home"></i> داشبۆرد</a></li>
-                    <li><a href="#" onclick="showSection('patients')"><i class="fas fa-user-injured"></i> نەخۆشەکان</a></li>
-                    <li><a href="#" onclick="showSection('doctors')"><i class="fas fa-user-md"></i> پزیشکەکان</a></li>
-                    <li><a href="#" onclick="showSection('appointments')"><i class="fas fa-calendar-check"></i> چاوپێکەوتنەکان</a></li>
-                    <li id="login-nav"><a href="#" onclick="showSection('login')"><i class="fas fa-sign-in-alt"></i> خۆتۆمارکردن</a></li>
-                    <li id="logout-nav" style="display: none;"><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> دەرچوون</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <!-- ناوەڕۆک -->
-    <main class="container">
-        <!-- بەشی خۆتۆمارکردن -->
-        <section id="login-section" class="section active">
-            <div class="login-container">
-                <h2><i class="fas fa-sign-in-alt"></i> خۆتۆمارکردن</h2>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="username">ناوی بەکارهێنەر:</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">تێپەڕەوشە:</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">بچۆ ژوورەوە</button>
-                </form>
-                <div class="demo-credentials">
-                    <h3>زانیاری تاقیکردنەوە:</h3>
-                    <p><strong>ناوی بەکارهێنەر:</strong> admin</p>
-                    <p><strong>تێپەڕەوشە:</strong> admin123</p>
-                </div>
-            </div>
-        </section>
+    <!-- پەڵە ڕووناکییەکان -->
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
 
-        <!-- بەشی داشبۆرد -->
-        <section id="dashboard-section" class="section">
-            <h2><i class="fas fa-home"></i> داشبۆرد</h2>
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-injured"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="total-patients">0</h3>
-                        <p>کۆی نەخۆشەکان</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="total-doctors">0</h3>
-                        <p>کۆی پزیشکەکان</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="today-appointments">0</h3>
-                        <p>چاوپێکەوتنەکانی ئەمڕۆ</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-procedures"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="active-patients">0</h3>
-                        <p>نەخۆشە چالاکەکان</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- ئاسمانی ئەستێرەکان -->
+    <div class="stars-container" id="starsContainer"></div>
 
-        <!-- بەشی نەخۆشەکان -->
-        <section id="patients-section" class="section">
-            <div class="section-header">
-                <h2><i class="fas fa-user-injured"></i> بەڕێوەبردنی نەخۆشەکان</h2>
-                <button class="btn btn-primary" onclick="showPatientForm()">
-                    <i class="fas fa-plus"></i> نەخۆشی نوێ
-                </button>
-            </div>
-            
-            <!-- فۆرمی زیادکردنی/نوێکردنەوەی نەخۆش -->
-            <div id="patient-form-container" style="display: none;">
-                <form id="patient-form">
-                    <input type="hidden" id="patient-id">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="patient-name">ناوی تەواو:</label>
-                            <input type="text" id="patient-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="patient-age">تەمەن:</label>
-                            <input type="number" id="patient-age" required min="0" max="150">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="patient-gender">ڕەگەز:</label>
-                            <select id="patient-gender" required>
-                                <option value="">هەڵبژاردن</option>
-                                <option value="نێر">نێر</option>
-                                <option value="مێ">مێ</option>
-                                <option value="نادیار">نادیار</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="patient-phone">ژمارەی مۆبایل:</label>
-                            <input type="tel" id="patient-phone">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="patient-address">ناونیشان:</label>
-                        <textarea id="patient-address" rows="2"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="patient-date">بەرواری هاتنە ناو:</label>
-                            <input type="date" id="patient-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="patient-status">دۆخ:</label>
-                            <select id="patient-status">
-                                <option value="لە عیادە">لە عیادە</option>
-                                <option value="چاکبووەوە">چاکبووەوە</option>
-                                <option value="کوژرا">کوژرا</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">پاشەکەوت</button>
-                        <button type="button" class="btn btn-secondary" onclick="hidePatientForm()">پاشگەزبوونەوە</button>
-                    </div>
-                </form>
-            </div>
-            
-            <!-- خشتەی نەخۆشەکان -->
-            <div class="table-container">
-                <table id="patients-table">
-                    <thead>
-                        <tr>
-                            <th>ناو</th>
-                            <th>تەمەن</th>
-                            <th>ڕەگەز</th>
-                            <th>ژمارەی مۆبایل</th>
-                            <th>بەرواری هاتنە ناو</th>
-                            <th>دۆخ</th>
-                            <th>کردارەکان</th>
-                        </tr>
-                    </thead>
-                    <tbody id="patients-table-body">
-                        <!-- داتاکان لێرە زیاد دەکرێن -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
+    <!-- کرۆسەری تایبەت -->
+    <div class="custom-cursor" id="customCursor"></div>
 
-        <!-- بەشی پزیشکەکان -->
-        <section id="doctors-section" class="section">
-            <h2><i class="fas fa-user-md"></i> پزیشکەکان</h2>
-            <div class="table-container">
-                <table id="doctors-table">
-                    <thead>
-                        <tr>
-                            <th>ناو</th>
-                            <th>تایبەتمەندی</th>
-                            <th>ژمارەی مۆبایل</th>
-                            <th>ئیمەیڵ</th>
-                            <th>شێفت</th>
-                        </tr>
-                    </thead>
-                    <tbody id="doctors-table-body">
-                        <!-- داتاکان لێرە زیاد دەکرێن -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
+    <!-- ناوەڕۆکی سەرەکی -->
+    <div class="main-content">
+        <!-- دەقی خۆشەویستی -->
+        <div class="love-text" id="loveText"></div>
 
-        <!-- بەشی چاوپێکەوتنەکان -->
-        <section id="appointments-section" class="section">
-            <h2><i class="fas fa-calendar-check"></i> چاوپێکەوتنەکان</h2>
-            <div class="table-container">
-                <table id="appointments-table">
-                    <thead>
-                        <tr>
-                            <th>ناوی نەخۆش</th>
-                            <th>ناوی پزیشک</th>
-                            <th>بەروار</th>
-                            <th>کات</th>
-                            <th>هۆکار</th>
-                            <th>دۆخ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="appointments-table-body">
-                        <!-- داتاکان لێرە زیاد دەکرێن -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+        <!-- دەقی مەرگ جوان -->
+        <div class="death-text">مەرگ جوان</div>
+    </div>
 
-    <!-- پێجە -->
-    <footer>
-        <div class="container">
-            <p>سیستەمی بەڕێوەبردی عیادە &copy; <span id="current-year">2023</span> | دروستکراوە بە HTML, CSS, JavaScript و Node.js</p>
-        </div>
-    </footer>
+    <script>
+        // ======= دروستکردنی ئەستێرەکان =======
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            const starCount = 250;
 
-    <!-- JavaScript -->
-    <script src="js/main.js"></script>
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                const size = Math.random() * 3 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 3 + 2;
+                const delay = Math.random() * 5;
+
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = x + '%';
+                star.style.top = y + '%';
+                star.style.setProperty('--duration', duration + 's');
+                star.style.setProperty('--delay', delay + 's');
+
+                container.appendChild(star);
+            }
+        }
+
+        // ======= دروستکردنی ئەستێرەی ڕاکشاو =======
+        function createShootingStars() {
+            const container = document.getElementById('starsContainer');
+            const shootingStarCount = 4;
+
+            for (let i = 0; i < shootingStarCount; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+
+                const x = Math.random() * 80;
+                const y = Math.random() * 40;
+                const shootDuration = Math.random() * 4 + 5;
+                const shootDelay = Math.random() * 12;
+
+                shootingStar.style.left = x + '%';
+                shootingStar.style.top = y + '%';
+                shootingStar.style.setProperty('--shoot-duration', shootDuration + 's');
+                shootingStar.style.setProperty('--shoot-delay', shootDelay + 's');
+
+                container.appendChild(shootingStar);
+            }
+        }
+
+        // ======= دەقی وشە لەدوای وشە =======
+        function displayWordsOneByOne() {
+            const text = `سڵاو کەس و کارم هیوام وایە تەمەنت پر بێت لە خێرو بەرکەت سەرتا ئەم رۆژە لەخۆم پیرۆز پاشان لەتۆ نوری چاوم جەرجی سۆر نەم توانی بەم شێوازی خۆم دەمەوێت ئەم رۆژە بە نرخ هەلبسەنگێنم بەڵام ئەوندەی توانیم کۆمەڵە قسەیەک لە ناخی دڵمەوە بکەم بێ کۆپی کردنی تێکست ئیلاهی تەمەنت پر خێرو بەرکەت بکات بۆمن ئەتو ئەو هونەرمەندەی کە بە تێپەڕینی ساڵەکان پەیکەری ژیانی خۆت لە بەردی کات دەتاشیت با تاشینەکانت ورد و پڕ لە مانا بن پریان بکە لە فەرۆی مام خدری تا پێت بڵێم ئەم فەرزادەی ئیستا دەیناسی بە مانای کەلیمە بە تەواوی نەت ناسیووە چونکە نرخی شتانێک کە بە نرخن خودی خۆیان لای من دە ئەوندە بە نرخ ترن هیوادارم رۆژەکانی تری لەدایک بوونت لای من بێت ساڵەکانی ترت لای من بێت`;
+
+            const words = text.split(' ');
+            const loveTextDiv = document.getElementById('loveText');
+
+            words.forEach((word, index) => {
+                const span = document.createElement('span');
+                span.classList.add('word');
+                span.textContent = word;
+                span.style.setProperty('--word-delay', (index * 0.12) + 's');
+                loveTextDiv.appendChild(span);
+            });
+        }
+
+        // ======= کرۆسەری تایبەت =======
+        function customCursor() {
+            const cursor = document.getElementById('customCursor');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            document.addEventListener('mouseleave', () => {
+                cursor.style.opacity = '0';
+            });
+
+            document.addEventListener('mouseenter', () => {
+                cursor.style.opacity = '1';
+            });
+
+            // گەورەکردنی کرۆسەر بەسەر دەق
+            const interactiveElements = document.querySelectorAll('.word, .death-text');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
+                    cursor.style.background = 'radial-gradient(circle, rgba(240, 215, 140, 0.9), transparent)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.background = 'radial-gradient(circle, rgba(212, 175, 55, 0.8), transparent)';
+                });
+            });
+        }
+
+        // ======= پارتیکڵی زیادە بۆ کرۆسەر =======
+        function createCursorParticles() {
+            document.addEventListener('mousemove', (e) => {
+                if (Math.random() > 0.7) {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: fixed;
+                        width: 4px;
+                        height: 4px;
+                        background: #d4af37;
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 9998;
+                        left: ${e.clientX}px;
+                        top: ${e.clientY}px;
+                        box-shadow: 0 0 6px #d4af37, 0 0 12px #f0d78c;
+                        animation: cursorParticle 0.8s ease-out forwards;
+                    `;
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 800);
+                }
+            });
+
+            // زیادکردنی ئەنیمەیشنی پارتیکڵ
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes cursorParticle {
+                    0% {
+                        opacity: 1;
+                        transform: scale(1) translate(0, 0);
+                    }
+                    100% {
+                        opacity: 0;
+                        transform: scale(0) translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // ======= دەستپێکردنی هەموو شتێک =======
+        function init() {
+            createStars();
+            createShootingStars();
+            displayWordsOneByOne();
+            customCursor();
+            createCursorParticles();
+
+            // زیادکردنی ساڵی 2026 بۆ کەشێکی تایبەتتر
+            console.log('%c🌙 ڕۆژی لەدایکبوونت پیرۆز بێت - 2026 🌙', 
+                'color: #d4af37; font-size: 20px; font-family: serif; text-shadow: 0 0 10px gold;');
+            console.log('%c💫 دروستکراوە لەلایەن دڵێکی پڕ لە خۆشەویستییەوە 💫', 
+                'color: #f0d78c; font-size: 14px;');
+        }
+
+        // دەستپێکردن
+        init();
+    </script>
 </body>
 </html>
