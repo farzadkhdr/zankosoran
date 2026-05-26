@@ -1,613 +1,477 @@
 <!DOCTYPE html>
 <html lang="ckb" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>جەژنت پیرۆز 💖 رەیان</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جەژنی قوربان پیرۆز - رەیان</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
 
-    body {
-      background: linear-gradient(145deg, #1a0b0b 0%, #2d1a1a 40%, #4a2323 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Segoe UI', 'Nizar', 'Rabar', 'Tahoma', sans-serif;
-      padding: 20px;
-      margin: 0;
-      position: relative;
-      overflow-x: hidden;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .hearts-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    .heart {
-      position: absolute;
-      color: rgba(255, 180, 180, 0.25);
-      font-size: 28px;
-      user-select: none;
-      animation: floatUp 7s infinite ease-in;
-      opacity: 0;
-    }
+        /* لایەنی یوتوب - شاراوە */
+        .youtube-container {
+            position: fixed;
+            bottom: -200px;
+            left: -200px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(100vh) rotate(0deg) scale(0.8);
-        opacity: 0.7;
-      }
-      50% {
-        opacity: 0.9;
-      }
-      100% {
-        transform: translateY(-10vh) rotate(30deg) scale(1.4);
-        opacity: 0;
-      }
-    }
+        /* ئەنیمەیشنی ئەستێرەکان */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .card {
-      position: relative;
-      z-index: 10;
-      background: rgba(20, 8, 8, 0.75);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(220, 160, 140, 0.45);
-      border-radius: 48px;
-      padding: 35px 30px 45px;
-      max-width: 700px;
-      width: 100%;
-      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7), 0 0 50px rgba(210, 120, 100, 0.4);
-      text-align: center;
-      color: #fbe9e7;
-      transition: all 0.4s ease;
-    }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+            opacity: 0;
+        }
 
-    .music-control {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 20;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
 
-    .music-btn {
-      background: rgba(255, 180, 160, 0.25);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(220, 160, 140, 0.6);
-      color: #ffe0d5;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
+        /* ئەنیمەیشنی مانگ و ئەستێرە گەورەکان */
+        .moon {
+            position: fixed;
+            top: 30px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 60% 40%, #fffacd, #f0c040);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(255, 200, 50, 0.8), 0 0 120px rgba(255, 180, 30, 0.6);
+            animation: moonGlow 3s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.7;
+        }
 
-    .music-btn:hover {
-      background: rgba(200, 110, 90, 0.5);
-      transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(210, 100, 80, 0.6);
-    }
+        @keyframes moonGlow {
+            0%, 100% { box-shadow: 0 0 60px rgba(255, 200, 50, 0.8), 0 0 120px rgba(255, 180, 30, 0.6); }
+            50% { box-shadow: 0 0 80px rgba(255, 220, 80, 1), 0 0 160px rgba(255, 200, 60, 0.9); }
+        }
 
-    .volume-slider {
-      width: 80px;
-      accent-color: #e07b6b;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
-      cursor: pointer;
-    }
+        /* دڵی ئەنیمەیشن */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .message-area {
-      font-size: 1.7rem;
-      line-height: 2.4rem;
-      min-height: 180px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #ffd9cc;
-      text-shadow: 0 0 12px #b34b3a;
-      font-weight: 400;
-      letter-spacing: 0.5px;
-      margin-bottom: 30px;
-      border-bottom: 1px dashed #c97b6b;
-      padding-bottom: 25px;
-      transition: all 0.2s;
-      margin-top: 20px;
-    }
+        .heart {
+            position: absolute;
+            font-size: 25px;
+            animation: floatUp 4s linear infinite;
+            opacity: 0;
+        }
 
-    .special-dedication {
-      font-size: 2.6rem;
-      font-weight: 700;
-      margin-top: 25px;
-      color: #ffb7a7;
-      text-shadow: 0 0 20px #e65c4b, 0 0 40px #b52e1b;
-      background: linear-gradient(to right, #ffd6cc, #ffaa8c);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: glowPulse 2.2s infinite alternate;
-      letter-spacing: 1px;
-      line-height: 3.4rem;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1.2s ease, transform 1s ease;
-    }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
-    .special-dedication.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+        /* کۆنتێنەری سەرەکی */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 30px;
+            padding: 40px 30px;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(255, 215, 0, 0.05);
+            animation: containerGlow 4s ease-in-out infinite;
+            margin: 20px;
+        }
 
-    @keyframes glowPulse {
-      0% {
-        text-shadow: 0 0 15px #c0452f, 0 0 35px #a1301f;
-      }
-      100% {
-        text-shadow: 0 0 30px #ff7b5c, 0 0 65px #e6391e;
-      }
-    }
+        @keyframes containerGlow {
+            0%, 100% { border-color: rgba(255, 215, 0, 0.3); }
+            50% { border-color: rgba(255, 215, 0, 0.7); }
+        }
 
-    .cursor {
-      display: inline-block;
-      width: 3px;
-      background: #ffb09c;
-      margin-right: 4px;
-      animation: blink 1s step-end infinite;
-      vertical-align: middle;
-      height: 1.5em;
-    }
+        /* نامەکە - ئەنیمەیشنی پیت بە پیت */
+        .message-container {
+            text-align: right;
+            direction: rtl;
+            min-height: 250px;
+            position: relative;
+        }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
+        .typed-text {
+            font-size: 22px;
+            color: #f5e6d3;
+            line-height: 2;
+            text-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            position: relative;
+        }
 
-    .reset-btn {
-      background: rgba(255, 230, 220, 0.2);
-      border: 1px solid #d69b8b;
-      color: #ffeae3;
-      padding: 12px 28px;
-      border-radius: 40px;
-      font-size: 1.2rem;
-      margin-top: 20px;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: 0.3s;
-      font-family: inherit;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 28px;
+            background: #ffd700;
+            animation: blink 0.7s infinite;
+            margin-right: 2px;
+            vertical-align: middle;
+        }
 
-    .reset-btn:hover {
-      background: rgba(190, 100, 80, 0.5);
-      border-color: #fca18d;
-      box-shadow: 0 0 25px #d94e3b;
-      color: white;
-    }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
 
-    .loading-indicator {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 100;
-      color: #ffb7a7;
-      font-size: 1.4rem;
-      background: rgba(0,0,0,0.7);
-      padding: 15px 25px;
-      border-radius: 30px;
-      backdrop-filter: blur(10px);
-      animation: fadeInOut 2s ease-in-out;
-    }
+        /* تێکستی گەورە لە خوارەوە */
+        .big-text-container {
+            margin-top: 50px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease-out forwards;
+            animation-delay: 8s;
+        }
 
-    @keyframes fadeInOut {
-      0% { opacity: 0; }
-      20% { opacity: 1; }
-      80% { opacity: 1; }
-      100% { opacity: 0; }
-    }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    @media (max-width: 500px) {
-      .message-area {
-        font-size: 1.3rem;
-        line-height: 2rem;
-      }
-      .special-dedication {
-        font-size: 1.9rem;
-      }
-      .music-control {
-        top: 10px;
-        left: 10px;
-      }
-    }
-  </style>
+        .big-text {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700, #ffec8b, #ffb347, #ffcc00);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShine 3s ease-in-out infinite;
+            text-shadow: none;
+            letter-spacing: 2px;
+            line-height: 1.8;
+        }
+
+        @keyframes goldShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* دیزاینی لامپەکان */
+        .lantern {
+            position: fixed;
+            top: 10px;
+            font-size: 50px;
+            animation: swing 3s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 15px rgba(255, 150, 0, 0.8));
+        }
+
+        .lantern-left {
+            left: 30px;
+            animation-delay: 0s;
+        }
+
+        .lantern-right {
+            right: 30px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* پەڕەی گوڵاوی */
+        .rose-petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            font-size: 20px;
+            animation: petalFall linear infinite;
+        }
+
+        @keyframes petalFall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) translateX(0px);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) translateX(100px);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg) translateX(-50px);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .big-text {
+                font-size: 28px;
+            }
+            .typed-text {
+                font-size: 17px;
+                line-height: 1.8;
+            }
+            .main-container {
+                padding: 25px 15px;
+                margin: 10px;
+            }
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 20px;
+                right: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="hearts-container" id="heartsContainer"></div>
-  
-  <!-- ئیندیکەیتەری بارکردن -->
-  <div class="loading-indicator" id="loadingIndicator">🎵 ئامادەکردنی موزیک...</div>
 
-  <div class="card">
-    <div class="music-control">
-      <button class="music-btn" id="musicToggle" title="ڕاگرتن/دەستپێکردنی موزیک">🔊</button>
-      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40" title="ڕێکخستنی دەنگ">
+    <!-- ئەنیمەیشنی ئەستێرەکان -->
+    <div class="stars" id="starsContainer"></div>
+
+    <!-- مانگ -->
+    <div class="moon"></div>
+
+    <!-- لامپەکان -->
+    <div class="lantern lantern-right">🏮</div>
+    <div class="lantern lantern-left">🏮</div>
+
+    <!-- دڵەکان -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- پەڕەی گوڵاوی -->
+    <div id="petalsContainer"></div>
+
+    <!-- کۆنتێنەری سەرەکی -->
+    <div class="main-container">
+        <!-- نامەکە -->
+        <div class="message-container">
+            <p class="typed-text" id="typedMessage"></p>
+            <span class="cursor" id="cursor"></span>
+        </div>
+
+        <!-- تێکستی گەورە -->
+        <div class="big-text-container" id="bigTextContainer">
+            <p class="big-text">
+                رەیانم شەکرە سێوەکەم<br>
+                مەرگ جوانی من
+            </p>
+        </div>
     </div>
 
-    <div class="message-area" id="typedMessage">
-      <span id="textContainer"></span><span class="cursor" id="cursorSpan"></span>
+    <!-- لایەنی یوتوب -->
+    <div class="youtube-container">
+        <iframe 
+            id="youtubePlayer"
+            width="1" 
+            height="1" 
+            src="https://www.youtube.com/embed/A3US5mYSZJw?autoplay=1&loop=1&playlist=A3US5mYSZJw&controls=0&showinfo=0&rel=0&mute=0&enablejsapi=1"
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+        </iframe>
     </div>
 
-    <div class="special-dedication" id="specialText">
-      رەیانم شەکرە سێوەکەم مەرگ جوانی من
-    </div>
+    <script>
+        // ناونیشانی یوتوب
+        const youtubeUrl = "https://youtu.be/A3US5mYSZJw?si=1X4WdWl0A6dJHfbE";
 
-    <button class="reset-btn" id="replayBtn">🔄 دووبارە بینینەوەی نامەکە</button>
-  </div>
+        // نامەکە
+        const fullMessage = `چەژنت پیرۆز کەس و کارم ماڵەکەم رەیان جیان\nهیوادارم رۆژێک دابێت جەژن لەگەڵ من بەڕێبکەی\nو بەیانی کە لەخەو هەستام ماچی نیوچەوانت بکەم و پێت بلێم جەژن پیرۆز هاوسەرەکەم\nمن نازانم قسەی نەستەلەق بکەم ئەمەوێت ئەوەی لە دڵمە ئەوانت پێ بڵێم\nداوا کارم لە خوای گەورەو میهرەبان\nئە جەژنەت لۆ بکاتە هەزار جەژن\nبتگەینتە هەرچی خۆزگە و هیوای لە دڵتە\nپیكمان شاد بکات`;
 
-  <script>
-    (function() {
-      const fullMessage = "چەژنت پیرۆز کەس و کارم ماڵەکەم رەیان جیان هیوادارم رۆژێک دابێت جەژن لەگەڵ من بەڕێبکەی و بەیانی کە لەخەو هەستام ماچی نیوچەوانت بکەم و پێت بلێم جەژن پیرۆز هاوسەرەکەم من نازانم قسەی نەستەلەق بکەم ئەمەوێت ئەوەی لە دڵمە ئەوانت پێ بڵێم داوا کارم لە خوای گەورەو میهرەبان ئە جەژنەت لۆ بکاتە هەزار جەژن بتگەینتە هەرچی خۆزگە و هیوای لە دڵتە پیكمان شاد بکات";
-      
-      const textContainer = document.getElementById('textContainer');
-      const cursorSpan = document.getElementById('cursorSpan');
-      const specialElement = document.getElementById('specialText');
-      const replayBtn = document.getElementById('replayBtn');
-      const musicToggle = document.getElementById('musicToggle');
-      const volumeSlider = document.getElementById('volumeSlider');
-      const loadingIndicator = document.getElementById('loadingIndicator');
+        const typedTextElement = document.getElementById('typedMessage');
+        const cursorElement = document.getElementById('cursor');
+        const bigTextContainer = document.getElementById('bigTextContainer');
 
-      let typingInterval = null;
-      let currentIndex = 0;
-      let animationActive = false;
+        let charIndex = 0;
+        let typingSpeed = 70; // خێرایی نوسین (میلی چرکە)
 
-      // =============== سیستەمی موزیکی خۆکار ===============
-      let audioContext = null;
-      let musicGainNode = null;
-      let isMusicPlaying = true; // بە شێوەی خۆکارانە چالاکە
-      let musicOscillators = [];
-      let musicInterval = null;
-      let musicStarted = false;
-
-      // فەنکشنی دروستکردنی دەنگی پیانۆی نەرمتر و ڕۆمانتیکتر
-      function createRomanticPianoNote(frequency, startTime, duration, gainNode) {
-        if (!audioContext) return null;
-        
-        // ئۆسیلاتۆری سەرەکی بۆ دەنگی پیانۆ
-        const osc1 = audioContext.createOscillator();
-        const osc2 = audioContext.createOscillator();
-        const osc3 = audioContext.createOscillator();
-        
-        const noteGain = audioContext.createGain();
-        const filter = audioContext.createBiquadFilter();
-        
-        // ڕێکخستنی فیلتەر بۆ دەنگی گەرمتر
-        filter.type = 'lowpass';
-        filter.frequency.value = 800;
-        filter.Q.value = 0.5;
-        
-        // ئۆسیلاتۆری یەکەم - دەنگی سەرەکی
-        osc1.type = 'sine';
-        osc1.frequency.value = frequency;
-        
-        // ئۆسیلاتۆری دووەم - بۆ هارمۆنی
-        osc2.type = 'sine';
-        osc2.frequency.value = frequency * 2;
-        
-        // ئۆسیلاتۆری سێیەم - بۆ قوڵی
-        osc3.type = 'triangle';
-        osc3.frequency.value = frequency * 0.5;
-        
-        // ڕێکخستنی ڤۆڵیومی نۆتەکە بە شێوەی پیانۆ
-        const now = audioContext.currentTime + startTime;
-        noteGain.gain.setValueAtTime(0, now);
-        noteGain.gain.linearRampToValueAtTime(0.15, now + 0.02); // هێرشی خێرا
-        noteGain.gain.linearRampToValueAtTime(0.08, now + 0.1); // دابەزینی سەرەتایی
-        noteGain.gain.setValueAtTime(0.08, now + 0.1);
-        noteGain.gain.linearRampToValueAtTime(0.03, now + duration * 0.7); // بەردەوامی
-        noteGain.gain.linearRampToValueAtTime(0, now + duration); // کۆتایی
-        
-        // پەیوەندیکردنەکان
-        osc1.connect(noteGain);
-        osc2.connect(noteGain);
-        osc3.connect(noteGain);
-        noteGain.connect(filter);
-        filter.connect(gainNode);
-        
-        // دەستپێکردن و ڕاگرتن
-        osc1.start(now);
-        osc2.start(now);
-        osc3.start(now);
-        osc1.stop(now + duration + 0.1);
-        osc2.stop(now + duration + 0.1);
-        osc3.stop(now + duration + 0.1);
-        
-        return [osc1, osc2, osc3];
-      }
-
-      function createSoftMusic() {
-        if (!audioContext || audioContext.state === 'closed') {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          musicGainNode = audioContext.createGain();
-          musicGainNode.connect(audioContext.destination);
-          musicGainNode.gain.value = volumeSlider.value / 100 * 0.25;
-        }
-        
-        if (audioContext.state === 'suspended') {
-          audioContext.resume().then(() => {
-            console.log('AudioContext resumed automatically');
-          });
-        }
-
-        // پیانۆی ڕۆمانتیک بە نۆتە کوردییەکان
-        const romanticMelody = [
-          // ڕیزبەندی نۆتەکان بە شێوازی کوردی و ڕۆمانتیک
-          261.63, 329.63, 349.23, 392.00, // Do Mi Fa Sol
-          349.23, 329.63, 293.66, 261.63, // Fa Mi Re Do
-          329.63, 349.23, 392.00, 440.00, // Mi Fa Sol La
-          392.00, 349.23, 329.63, 293.66, // Sol Fa Mi Re
-          349.23, 392.00, 440.00, 493.88, // Fa Sol La Si
-          440.00, 392.00, 349.23, 329.63, // La Sol Fa Mi
-          293.66, 329.63, 349.23, 392.00, // Re Mi Fa Sol
-          349.23, 329.63, 293.66, 261.63  // Fa Mi Re Do
-        ];
-
-        // هارمۆنی بۆ قوڵکردنی دەنگ
-        const harmonyNotes = [
-          130.81, 164.81, 174.61, 196.00,
-          174.61, 164.81, 146.83, 130.81,
-          164.81, 174.61, 196.00, 220.00,
-          196.00, 174.61, 164.81, 146.83,
-          174.61, 196.00, 220.00, 246.94,
-          220.00, 196.00, 174.61, 164.81,
-          146.83, 164.81, 174.61, 196.00,
-          174.61, 164.81, 146.83, 130.81
-        ];
-        
-        let noteIndex = 0;
-        
-        function playNextNote() {
-          if (!isMusicPlaying || !audioContext || audioContext.state === 'closed') return;
-          
-          // پاککردنەوەی ئۆسیلاتۆرە کۆنەکان
-          musicOscillators = musicOscillators.filter(osc => {
-            try { 
-              return osc && osc.context && osc.context.state !== 'closed'; 
-            } catch(e) { 
-              return false; 
-            }
-          });
-          
-          const melodyNote = romanticMelody[noteIndex % romanticMelody.length];
-          const harmonyNote = harmonyNotes[noteIndex % harmonyNotes.length];
-          
-          // دروستکردنی نۆتی سەرەکی
-          const melodyOscs = createRomanticPianoNote(melodyNote, 0, 1.8, musicGainNode);
-          if (melodyOscs) musicOscillators.push(...melodyOscs);
-          
-          // زیادکردنی هارمۆنی بە دەنگی نزمتر
-          if (noteIndex % 2 === 0) { // هەموو دوو نۆتێک جارێک
-            const harmonyOscs = createRomanticPianoNote(harmonyNote, 0.1, 2.0, musicGainNode);
-            if (harmonyOscs) musicOscillators.push(...harmonyOscs);
-          }
-          
-          noteIndex++;
-        }
-
-        // دەستپێکردنی موزیک بە شێوەیەکی ڕێک
-        playNextNote(); // یەکەم نۆت
-        musicInterval = setInterval(playNextNote, 1400); // هەر 1.4 چرکە
-      }
-
-      function stopMusic() {
-        if (musicInterval) {
-          clearInterval(musicInterval);
-          musicInterval = null;
-        }
-        musicOscillators.forEach(osc => {
-          try { osc.stop(); } catch(e) {}
-        });
-        musicOscillators = [];
-        isMusicPlaying = false;
-        musicToggle.textContent = '🎵';
-      }
-
-      function startMusic() {
-        if (!audioContext || audioContext.state === 'closed') {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          musicGainNode = audioContext.createGain();
-          musicGainNode.connect(audioContext.destination);
-          musicGainNode.gain.value = volumeSlider.value / 100 * 0.25;
-        }
-        
-        // چارەسەری خۆکارانە بۆ AudioContext
-        if (audioContext.state === 'suspended') {
-          audioContext.resume().then(() => {
-            console.log('AudioContext resumed');
-            continueStartMusic();
-          }).catch(err => {
-            console.log('AudioContext resume failed, trying alternative...');
-            // هەوڵدانەوە بە شێوازێکی تر
-            setTimeout(() => {
-              if (audioContext.state === 'suspended') {
-                audioContext.resume().then(() => continueStartMusic());
-              }
-            }, 100);
-          });
-        } else {
-          continueStartMusic();
-        }
-      }
-      
-      function continueStartMusic() {
-        stopMusic();
-        isMusicPlaying = true;
-        musicStarted = true;
-        musicToggle.textContent = '🔊';
-        createSoftMusic();
-        // شاردنەوەی ئیندیکەیتەری بارکردن
-        if (loadingIndicator) {
-          loadingIndicator.style.display = 'none';
-        }
-      }
-
-      function toggleMusic() {
-        if (isMusicPlaying) {
-          stopMusic();
-        } else {
-          startMusic();
-        }
-      }
-
-      // دەستپێکردنی خۆکارانەی موزیک
-      function autoStartMusic() {
-        console.log('Attempting auto-start music...');
-        
-        // دروستکردنی AudioContext بە شێوەی خۆکار
-        try {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          musicGainNode = audioContext.createGain();
-          musicGainNode.connect(audioContext.destination);
-          musicGainNode.gain.value = volumeSlider.value / 100 * 0.25;
-          
-          // چالاککردنی AudioContext
-          if (audioContext.state === 'suspended') {
-            audioContext.resume().then(() => {
-              console.log('AudioContext auto-resumed');
-              continueStartMusic();
-            }).catch(() => {
-              // ئەگەر خۆکارانە نەبوو، بە کلیک چالاک دەبێت
-              console.log('Waiting for user interaction...');
-              document.addEventListener('click', function autoStartOnClick() {
-                if (!musicStarted && audioContext.state === 'suspended') {
-                  audioContext.resume().then(() => continueStartMusic());
+        // فەنکشنی پیت بە پیت نوسین
+        function typeMessage() {
+            if (charIndex < fullMessage.length) {
+                const currentChar = fullMessage.charAt(charIndex);
+                
+                // زیادکردنی پیت
+                if (currentChar === '\n') {
+                    typedTextElement.innerHTML += '<br>';
+                } else {
+                    typedTextElement.innerHTML += currentChar;
                 }
-                document.removeEventListener('click', autoStartOnClick);
-              }, { once: true });
-            });
-          } else {
-            continueStartMusic();
-          }
-        } catch (e) {
-          console.log('Audio not supported:', e);
+                
+                charIndex++;
+                
+                // خێرایی جیاواز بۆ هەندێک پیت
+                let delay = typingSpeed;
+                if (currentChar === ' ' || currentChar === '\n') {
+                    delay = typingSpeed + 30;
+                } else if (currentChar === '.' || currentChar === '،') {
+                    delay = typingSpeed + 150;
+                }
+                
+                setTimeout(typeMessage, delay);
+                
+                // سکرۆڵ بۆ خوارەوە بۆ دیتنی تێکستی نوێ
+                typedTextElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            } else {
+                // نامە تەواو بوو - کێرسۆر بکوژێنەوە
+                cursorElement.style.display = 'none';
+                
+                // نیشاندانی تێکستی گەورە
+                setTimeout(() => {
+                    bigTextContainer.style.opacity = '1';
+                }, 300);
+            }
         }
-      }
 
-      // کۆنترۆڵی ڤۆڵیوم
-      volumeSlider.addEventListener('input', (e) => {
-        const volume = e.target.value / 100;
-        if (musicGainNode) {
-          musicGainNode.gain.value = volume * 0.25;
+        // دروستکردنی ئەستێرەکان
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            const starCount = 100;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                star.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(star);
+            }
         }
-      });
 
-      musicToggle.addEventListener('click', toggleMusic);
+        // دروستکردنی دڵەکان
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '✨', '🌟', '💫', '🕊️', '🌙'];
 
-      // =============== سیستەمی دڵەکان ===============
-      function createHearts() {
-        const container = document.getElementById('heartsContainer');
-        container.innerHTML = '';
-        const symbols = ['❤️', '🌸', '✨', '💖', '🌙', '🕊️', '💕', '🌹', '💝', '🎀'];
-        for (let i = 0; i < 35; i++) {
-          const heart = document.createElement('span');
-          heart.className = 'heart';
-          heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-          heart.style.left = Math.random() * 100 + '%';
-          heart.style.animationDelay = Math.random() * 8 + 's';
-          heart.style.fontSize = (18 + Math.floor(Math.random() * 30)) + 'px';
-          heart.style.animationDuration = (5 + Math.random() * 10) + 's';
-          container.appendChild(heart);
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 95 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.animationDelay = '0s';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+
+                // لابردنی دڵ دوای ئەنیمەیشن
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }, 300);
         }
-      }
 
-      // =============== سیستەمی تایپینگ ===============
-      function stopTyping() {
-        if (typingInterval) {
-          clearInterval(typingInterval);
-          typingInterval = null;
+        // دروستکردنی پەڕەی گوڵاوی
+        function createPetals() {
+            const container = document.getElementById('petalsContainer');
+            const petals = ['🌸', '🌷', '💮', '🏵️', '🌺', '🌹', '🥀', '💐'];
+
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.classList.add('rose-petal');
+                petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+                petal.style.left = Math.random() * 95 + '%';
+                petal.style.top = '-5%';
+                petal.style.animationDuration = (Math.random() * 5 + 6) + 's';
+                container.appendChild(petal);
+
+                // لابردنی پەڕە دوای ئەنیمەیشن
+                setTimeout(() => {
+                    petal.remove();
+                }, 8000);
+            }, 500);
         }
-      }
 
-      function resetAndStart() {
-        stopTyping();
-        specialElement.classList.remove('show');
-        textContainer.textContent = '';
-        currentIndex = 0;
-        animationActive = true;
-        cursorSpan.style.display = 'inline-block';
-        
-        typingInterval = setInterval(typeNextCharacter, 55);
-      }
+        // سەرەتاکردنی یوتوب
+        function initYouTube() {
+            // دروستکردنی ئەکتیڤەیشنی ئۆتۆپلەی بەکگراوند
+            const iframe = document.getElementById('youtubePlayer');
+            
+            // ئیشکردنی یوتوب دوای کلیکێک (بەهۆی سیاسەتی ئۆتۆپلەی وێبگەڕ)
+            document.addEventListener('click', function() {
+                iframe.src = iframe.src;
+            }, { once: true });
 
-      function typeNextCharacter() {
-        if (currentIndex < fullMessage.length) {
-          textContainer.textContent += fullMessage.charAt(currentIndex);
-          currentIndex++;
-        } else {
-          stopTyping();
-          animationActive = false;
-          cursorSpan.style.display = 'none';
-          specialElement.classList.add('show');
+            // هەوڵی ئۆتۆپلەی خۆکار
+            setTimeout(() => {
+                iframe.src = "https://www.youtube.com/embed/A3US5mYSZJw?autoplay=1&loop=1&playlist=A3US5mYSZJw&controls=0&showinfo=0&rel=0&mute=0&enablejsapi=1&origin=" + window.location.origin;
+            }, 500);
         }
-      }
 
-      // =============== ئیڤێنتەکان ===============
-      replayBtn.addEventListener('click', () => {
-        stopTyping();
-        resetAndStart();
-        if (!isMusicPlaying) {
-          startMusic();
-        }
-      });
+        // سەرەتاکردنی هەموو شتێک
+        window.addEventListener('load', () => {
+            createStars();
+            createHearts();
+            createPetals();
+            initYouTube();
+            
+            // دەستپێکردنی نوسینی نامەکە دوای 1.5 چرکە
+            setTimeout(() => {
+                typeMessage();
+            }, 1500);
+        });
 
-      // =============== دەستپێکردنی سەرەتایی ===============
-      createHearts();
-      resetAndStart();
-      
-      // دەستپێکردنی خۆکارانەی موزیک دوای 0.5 چرکە
-      setTimeout(() => {
-        autoStartMusic();
-      }, 500);
-
-      // زیادکردنی listener بۆ ئەوەی ئەگەر AudioContext هێشتا ڕاگرتبوو
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && audioContext && audioContext.state === 'suspended' && !musicStarted) {
-          audioContext.resume().then(() => {
-            if (!musicStarted) continueStartMusic();
-          });
-        }
-      });
-
-      // پاککردنەوە
-      window.addEventListener('beforeunload', () => {
-        stopTyping();
-        stopMusic();
-        if (audioContext) {
-          audioContext.close();
-        }
-      });
-
-      console.log('🎵 موزیک بە شێوەی خۆکارانە دەستپێدەکات...');
-      console.log('💖 جەژنت پیرۆز بێت!');
-
-    })();
-  </script>
+        // دووبارە بارکردنەوەی لاپەڕە بۆ ئەنیمەیشنەکان
+        window.addEventListener('beforeunload', () => {
+            // Cleanup
+        });
+    </script>
 </body>
 </html>
