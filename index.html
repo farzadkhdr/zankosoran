@@ -75,6 +75,47 @@
       transition: all 0.4s ease;
     }
 
+    /* کۆنترۆڵی موزیک */
+    .music-control {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+    }
+
+    .music-btn {
+      background: rgba(255, 180, 160, 0.25);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(220, 160, 140, 0.6);
+      color: #ffe0d5;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .music-btn:hover {
+      background: rgba(200, 110, 90, 0.5);
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(210, 100, 80, 0.6);
+    }
+
+    .volume-slider {
+      width: 80px;
+      accent-color: #e07b6b;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
     .message-area {
       font-size: 1.7rem;
       line-height: 2.4rem;
@@ -89,6 +130,7 @@
       border-bottom: 1px dashed #c97b6b;
       padding-bottom: 25px;
       transition: all 0.2s;
+      margin-top: 20px;
     }
 
     .special-dedication {
@@ -169,6 +211,10 @@
       .special-dedication {
         font-size: 1.9rem;
       }
+      .music-control {
+        top: 10px;
+        left: 10px;
+      }
     }
   </style>
 </head>
@@ -177,6 +223,12 @@
   <div class="hearts-container" id="heartsContainer"></div>
 
   <div class="card">
+    <!-- کۆنترۆڵی موزیک -->
+    <div class="music-control">
+      <button class="music-btn" id="musicToggle" title="ڕاگرتن/دەستپێکردنی موزیک">🎵</button>
+      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40" title="ڕێکخستنی دەنگ">
+    </div>
+
     <div class="message-area" id="typedMessage">
       <span id="textContainer"></span><span class="cursor" id="cursorSpan"></span>
     </div>
@@ -191,26 +243,139 @@
 
   <script>
     (function() {
-      // نامە ڕاستەقینەکەت بە هەمان شێوەی داخواوت
+      // نامە ڕاستەقینەکەت
       const fullMessage = "چەژنت پیرۆز کەس و کارم ماڵەکەم رەیان جیان هیوادارم رۆژێک دابێت جەژن لەگەڵ من بەڕێبکەی و بەیانی کە لەخەو هەستام ماچی نیوچەوانت بکەم و پێت بلێم جەژن پیرۆز هاوسەرەکەم من نازانم قسەی نەستەلەق بکەم ئەمەوێت ئەوەی لە دڵمە ئەوانت پێ بڵێم داوا کارم لە خوای گەورەو میهرەبان ئە جەژنەت لۆ بکاتە هەزار جەژن بتگەینتە هەرچی خۆزگە و هیوای لە دڵتە پیكمان شاد بکات";
       
       const textContainer = document.getElementById('textContainer');
       const cursorSpan = document.getElementById('cursorSpan');
       const specialElement = document.getElementById('specialText');
       const replayBtn = document.getElementById('replayBtn');
+      const musicToggle = document.getElementById('musicToggle');
+      const volumeSlider = document.getElementById('volumeSlider');
 
       let typingInterval = null;
       let currentIndex = 0;
       let animationActive = false;
 
-      // دروستکردنی دڵە هەڵکشاوەکان بۆ جوانی
+      // =============== سیستەمی موزیک ===============
+      // دروستکردنی کۆنێکستی دەنگی بۆ موزیکێکی هادی و ڕۆمانتیک
+      let audioContext = null;
+      let musicGainNode = null;
+      let isMusicPlaying = false;
+      let musicOscillators = [];
+      let musicInterval = null;
+
+      // ئەم فەنکشنە موزیکێکی نەرم و هێمن دروست دەکات (پیانۆی سۆفت)
+      function createSoftMusic() {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          musicGainNode = audioContext.createGain();
+          musicGainNode.connect(audioContext.destination);
+          musicGainNode.gain.value = volumeSlider.value / 100 * 0.3; // دەنگی نەرم
+        }
+
+        // تۆنەکانی پیانۆی هێمن (C major scale)
+        const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+        const softNotes = [261.63, 329.63, 349.23, 392.00, 440.00, 349.23, 329.63, 293.66];
+        
+        let noteIndex = 0;
+        
+        function playNextNote() {
+          if (!isMusicPlaying || !audioContext) return;
+          
+          // دروستکردنی ئۆسیلاتۆر بۆ دەنگی نەرم
+          const osc = audioContext.createOscillator();
+          const noteGain = audioContext.createGain();
+          
+          osc.type = 'sine'; // شەپۆلی ساین بۆ دەنگی نەرم
+          osc.frequency.value = softNotes[noteIndex % softNotes.length];
+          
+          noteGain.gain.setValueAtTime(0, audioContext.currentTime);
+          noteGain.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.1);
+          noteGain.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.8);
+          noteGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.2);
+          
+          osc.connect(noteGain);
+          noteGain.connect(musicGainNode);
+          
+          osc.start(audioContext.currentTime);
+          osc.stop(audioContext.currentTime + 1.3);
+          
+          musicOscillators.push(osc);
+          
+          noteIndex++;
+        }
+
+        // پاککردنەوەی ئۆسیلاتۆرە کۆنەکان
+        musicOscillators = musicOscillators.filter(osc => {
+          try { return osc.context && osc.context.state !== 'closed'; } 
+          catch(e) { return false; }
+        });
+
+        // دەستپێکردنی نۆتەکان بە شێوەیەکی هێواش
+        playNextNote();
+        musicInterval = setInterval(playNextNote, 1200); // هەر 1.2 چرکە نۆتێک
+      }
+
+      function stopMusic() {
+        if (musicInterval) {
+          clearInterval(musicInterval);
+          musicInterval = null;
+        }
+        // ڕاگرتنی هەموو ئۆسیلاتۆرەکان
+        musicOscillators.forEach(osc => {
+          try { osc.stop(); } catch(e) {}
+        });
+        musicOscillators = [];
+        isMusicPlaying = false;
+        musicToggle.textContent = '🎵';
+      }
+
+      function startMusic() {
+        if (!audioContext || audioContext.state === 'closed') {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          musicGainNode = audioContext.createGain();
+          musicGainNode.connect(audioContext.destination);
+          musicGainNode.gain.value = volumeSlider.value / 100 * 0.3;
+        }
+        
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        stopMusic(); // پاککردنەوەی پێشووتر
+        isMusicPlaying = true;
+        musicToggle.textContent = '🔊';
+        createSoftMusic();
+      }
+
+      function toggleMusic() {
+        if (isMusicPlaying) {
+          stopMusic();
+        } else {
+          startMusic();
+        }
+      }
+
+      // کۆنترۆڵی ڤۆڵیوم
+      volumeSlider.addEventListener('input', (e) => {
+        const volume = e.target.value / 100;
+        if (musicGainNode) {
+          musicGainNode.gain.value = volume * 0.3;
+        }
+      });
+
+      musicToggle.addEventListener('click', toggleMusic);
+
+      // =============== سیستەمی دڵەکان ===============
       function createHearts() {
         const container = document.getElementById('heartsContainer');
         container.innerHTML = '';
+        const symbols = ['❤️', '🌸', '✨', '💖', '🌙', '🕊️', '💕', '🌹'];
         for (let i = 0; i < 28; i++) {
           const heart = document.createElement('span');
           heart.className = 'heart';
-          heart.innerHTML = ['❤️', '🌸', '✨', '💖', '🌙', '🕊️'][Math.floor(Math.random() * 6)];
+          heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
           heart.style.left = Math.random() * 100 + '%';
           heart.style.animationDelay = Math.random() * 8 + 's';
           heart.style.fontSize = (20 + Math.floor(Math.random() * 26)) + 'px';
@@ -219,7 +384,7 @@
         }
       }
 
-      // ڕاگرتنی هەموو شتێک
+      // =============== سیستەمی تایپینگ ===============
       function stopTyping() {
         if (typingInterval) {
           clearInterval(typingInterval);
@@ -227,53 +392,57 @@
         }
       }
 
-      // شاردنەوەی دەقی تایبەت و ریسێتکردن
       function resetAndStart() {
         stopTyping();
-        // شاردنەوەی دەقی خوارەوە
         specialElement.classList.remove('show');
-        // پاککردنەوەی تێکست
         textContainer.textContent = '';
         currentIndex = 0;
         animationActive = true;
-        // دڵنیابوون لەوەی کێرسۆر دیارە
         cursorSpan.style.display = 'inline-block';
         
-        // دەستپێکردنی تایپینگ
-        typingInterval = setInterval(typeNextCharacter, 55); // خێرایی پیت پیت (55ms)
+        typingInterval = setInterval(typeNextCharacter, 55);
       }
 
-      // نووسینی پیتی داهاتوو
       function typeNextCharacter() {
         if (currentIndex < fullMessage.length) {
-          // زیادکردنی پیتی نوێ
           textContainer.textContent += fullMessage.charAt(currentIndex);
           currentIndex++;
         } else {
-          // تەواو بوون
           stopTyping();
           animationActive = false;
-          // شاردنەوەی کێرسۆر
           cursorSpan.style.display = 'none';
-          // پیشاندانی دەقی خوارەوە بە ئەنیمەیشن
           specialElement.classList.add('show');
         }
       }
 
-      // دووبارەکردنەوە بە دوگمە
+      // =============== ئیڤێنتەکان ===============
       replayBtn.addEventListener('click', () => {
-        // ئەگەر ئەنیمەیشن چالاکە، یەکەم جار بیوەستێنە و دووبارە دەستپێبکە
         stopTyping();
         resetAndStart();
+        // ئەگەر موزیک نەژەنرێت، دەستی پێبکە
+        if (!isMusicPlaying) {
+          startMusic();
+        }
       });
 
-      // دەستپێکردنی سەرەتا
+      // دەستپێکردنی سەرەتایی
       createHearts();
       resetAndStart();
+      
+      // موزیک بە شێوەی ئۆتۆماتیک دەستپێدەکات کاتێک بەکارهێنەر کلیک دەکات
+      document.addEventListener('click', function initAudioOnFirstClick() {
+        if (!isMusicPlaying && audioContext?.state !== 'running') {
+          startMusic();
+        }
+      }, { once: false });
 
-      // پاککردنەوە لەکاتی ڕۆیشتن (باشترە)
+      // پاککردنەوە
       window.addEventListener('beforeunload', () => {
         stopTyping();
+        stopMusic();
+        if (audioContext) {
+          audioContext.close();
+        }
       });
 
     })();
