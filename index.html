@@ -23,18 +23,47 @@
             font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
             overflow-x: hidden;
             position: relative;
+            cursor: pointer;
         }
 
-        /* لایەنی یوتوب - شاراوە */
-        .youtube-container {
+        /* دوگمەی دەستپێکردن */
+        .start-overlay {
             position: fixed;
-            bottom: -200px;
-            left: -200px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-            z-index: -1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #1a1a2e;
+            border: none;
+            padding: 25px 50px;
+            font-size: 28px;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            animation: pulse 2s infinite;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.9);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         /* ئەنیمەیشنی ئەستێرەکان */
@@ -61,7 +90,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* ئەنیمەیشنی مانگ و ئەستێرە گەورەکان */
+        /* مانگ */
         .moon {
             position: fixed;
             top: 30px;
@@ -81,7 +110,7 @@
             50% { box-shadow: 0 0 80px rgba(255, 220, 80, 1), 0 0 160px rgba(255, 200, 60, 0.9); }
         }
 
-        /* دڵی ئەنیمەیشن */
+        /* دڵەکان */
         .hearts-container {
             position: fixed;
             top: 0;
@@ -134,7 +163,7 @@
             50% { border-color: rgba(255, 215, 0, 0.7); }
         }
 
-        /* نامەکە - ئەنیمەیشنی پیت بە پیت */
+        /* نامەکە */
         .message-container {
             text-align: right;
             direction: rtl;
@@ -149,7 +178,6 @@
             text-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
             white-space: pre-wrap;
             word-wrap: break-word;
-            position: relative;
         }
 
         .cursor {
@@ -167,13 +195,17 @@
             50% { opacity: 0; }
         }
 
-        /* تێکستی گەورە لە خوارەوە */
+        /* تێکستی گەورە */
         .big-text-container {
             margin-top: 50px;
             text-align: center;
             opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .big-text-container.visible {
+            opacity: 1;
             animation: fadeInUp 1.5s ease-out forwards;
-            animation-delay: 8s;
         }
 
         @keyframes fadeInUp {
@@ -196,8 +228,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: goldShine 3s ease-in-out infinite;
-            text-shadow: none;
-            letter-spacing: 2px;
             line-height: 1.8;
         }
 
@@ -207,7 +237,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* دیزاینی لامپەکان */
+        /* لامپەکان */
         .lantern {
             position: fixed;
             top: 10px;
@@ -257,7 +287,38 @@
             }
         }
 
-        /* Responsive */
+        /* پلەیەری دەنگی */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
+        .audio-control button {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
             .big-text {
                 font-size: 28px;
@@ -276,10 +337,33 @@
                 top: 20px;
                 right: 20px;
             }
+            .start-button {
+                font-size: 22px;
+                padding: 20px 35px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- ئۆڤەرلەی دەستپێکردن -->
+    <div class="start-overlay" id="startOverlay">
+        <button class="start-button" onclick="startExperience()">
+            ✨ بۆ دەستپێکردن کلیک بکە ✨
+        </button>
+    </div>
+
+    <!-- پلەیەری یوتوب -->
+    <div id="youtubeContainer" style="position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
+        <div id="player"></div>
+    </div>
+
+    <!-- کۆنترۆڵی دەنگ -->
+    <div class="audio-control" id="audioControl" style="display: none;">
+        <span>🔊</span>
+        <span style="font-family: 'Noto Naskh Arabic';">گۆرانی</span>
+        <button id="toggleMusic">⏯️</button>
+    </div>
 
     <!-- ئەنیمەیشنی ئەستێرەکان -->
     <div class="stars" id="starsContainer"></div>
@@ -314,22 +398,97 @@
         </div>
     </div>
 
-    <!-- لایەنی یوتوب -->
-    <div class="youtube-container">
-        <iframe 
-            id="youtubePlayer"
-            width="1" 
-            height="1" 
-            src="https://www.youtube.com/embed/A3US5mYSZJw?autoplay=1&loop=1&playlist=A3US5mYSZJw&controls=0&showinfo=0&rel=0&mute=0&enablejsapi=1"
-            frameborder="0" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen>
-        </iframe>
-    </div>
+    <!-- ئەی پی ئای یوتوب -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
-        // ناونیشانی یوتوب
-        const youtubeUrl = "https://youtu.be/A3US5mYSZJw?si=1X4WdWl0A6dJHfbE";
+        let player;
+        let musicStarted = false;
+        let isPlaying = true;
+
+        // ئینیشیالیزەکردنی پلەیەری یوتوب
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '1',
+                width: '1',
+                videoId: 'A3US5mYSZJw',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'showinfo': 0,
+                    'rel': 0,
+                    'loop': 1,
+                    'playlist': 'A3US5mYSZJw',
+                    'mute': 0,
+                    'enablejsapi': 1,
+                    'origin': window.location.origin
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            console.log('پلەیەر ئامادەیە');
+        }
+
+        function onPlayerStateChange(event) {
+            // ئەگەر گۆرانی تەواو بوو، دووبارە دەستپێبکاتەوە
+            if (event.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+            }
+        }
+
+        // فەنکشنی دەستپێکردن
+        function startExperience() {
+            // لابردنی ئۆڤەرلە
+            document.getElementById('startOverlay').style.display = 'none';
+            
+            // نیشاندانی کۆنترۆڵی دەنگ
+            document.getElementById('audioControl').style.display = 'flex';
+            
+            // دەستپێکردنی گۆرانی
+            if (player && player.playVideo) {
+                player.unMute();
+                player.playVideo();
+                player.setVolume(50);
+            }
+            
+            musicStarted = true;
+            
+            // دەستپێکردنی ئەنیمەیشنەکان ئەگەر هێشتا دەستپێنەکردبێت
+            if (!window.animationsStarted) {
+                startAnimations();
+                window.animationsStarted = true;
+            }
+        }
+
+        // دەستپێکردنی هەموو ئەنیمەیشنەکان
+        function startAnimations() {
+            createStars();
+            createHearts();
+            createPetals();
+            
+            // دەستپێکردنی نوسینی نامەکە
+            setTimeout(() => {
+                typeMessage();
+            }, 1000);
+        }
+
+        // کۆنترۆڵی دەنگ
+        document.getElementById('toggleMusic').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isPlaying) {
+                player.pauseVideo();
+                this.textContent = '▶️';
+            } else {
+                player.playVideo();
+                this.textContent = '⏯️';
+            }
+            isPlaying = !isPlaying;
+        });
 
         // نامەکە
         const fullMessage = `چەژنت پیرۆز کەس و کارم ماڵەکەم رەیان جیان\nهیوادارم رۆژێک دابێت جەژن لەگەڵ من بەڕێبکەی\nو بەیانی کە لەخەو هەستام ماچی نیوچەوانت بکەم و پێت بلێم جەژن پیرۆز هاوسەرەکەم\nمن نازانم قسەی نەستەلەق بکەم ئەمەوێت ئەوەی لە دڵمە ئەوانت پێ بڵێم\nداوا کارم لە خوای گەورەو میهرەبان\nئە جەژنەت لۆ بکاتە هەزار جەژن\nبتگەینتە هەرچی خۆزگە و هیوای لە دڵتە\nپیكمان شاد بکات`;
@@ -339,14 +498,12 @@
         const bigTextContainer = document.getElementById('bigTextContainer');
 
         let charIndex = 0;
-        let typingSpeed = 70; // خێرایی نوسین (میلی چرکە)
+        const typingSpeed = 70;
 
-        // فەنکشنی پیت بە پیت نوسین
         function typeMessage() {
             if (charIndex < fullMessage.length) {
                 const currentChar = fullMessage.charAt(charIndex);
                 
-                // زیادکردنی پیت
                 if (currentChar === '\n') {
                     typedTextElement.innerHTML += '<br>';
                 } else {
@@ -355,7 +512,6 @@
                 
                 charIndex++;
                 
-                // خێرایی جیاواز بۆ هەندێک پیت
                 let delay = typingSpeed;
                 if (currentChar === ' ' || currentChar === '\n') {
                     delay = typingSpeed + 30;
@@ -364,16 +520,11 @@
                 }
                 
                 setTimeout(typeMessage, delay);
-                
-                // سکرۆڵ بۆ خوارەوە بۆ دیتنی تێکستی نوێ
                 typedTextElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
             } else {
-                // نامە تەواو بوو - کێرسۆر بکوژێنەوە
                 cursorElement.style.display = 'none';
-                
-                // نیشاندانی تێکستی گەورە
                 setTimeout(() => {
-                    bigTextContainer.style.opacity = '1';
+                    bigTextContainer.classList.add('visible');
                 }, 300);
             }
         }
@@ -381,9 +532,7 @@
         // دروستکردنی ئەستێرەکان
         function createStars() {
             const container = document.getElementById('starsContainer');
-            const starCount = 100;
-
-            for (let i = 0; i < starCount; i++) {
+            for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 star.style.left = Math.random() * 100 + '%';
@@ -407,11 +556,9 @@
                 heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
                 heart.style.left = Math.random() * 95 + '%';
                 heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                heart.style.animationDelay = '0s';
                 heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
                 container.appendChild(heart);
 
-                // لابردنی دڵ دوای ئەنیمەیشن
                 setTimeout(() => {
                     heart.remove();
                 }, 4000);
@@ -432,46 +579,11 @@
                 petal.style.animationDuration = (Math.random() * 5 + 6) + 's';
                 container.appendChild(petal);
 
-                // لابردنی پەڕە دوای ئەنیمەیشن
                 setTimeout(() => {
                     petal.remove();
                 }, 8000);
             }, 500);
         }
-
-        // سەرەتاکردنی یوتوب
-        function initYouTube() {
-            // دروستکردنی ئەکتیڤەیشنی ئۆتۆپلەی بەکگراوند
-            const iframe = document.getElementById('youtubePlayer');
-            
-            // ئیشکردنی یوتوب دوای کلیکێک (بەهۆی سیاسەتی ئۆتۆپلەی وێبگەڕ)
-            document.addEventListener('click', function() {
-                iframe.src = iframe.src;
-            }, { once: true });
-
-            // هەوڵی ئۆتۆپلەی خۆکار
-            setTimeout(() => {
-                iframe.src = "https://www.youtube.com/embed/A3US5mYSZJw?autoplay=1&loop=1&playlist=A3US5mYSZJw&controls=0&showinfo=0&rel=0&mute=0&enablejsapi=1&origin=" + window.location.origin;
-            }, 500);
-        }
-
-        // سەرەتاکردنی هەموو شتێک
-        window.addEventListener('load', () => {
-            createStars();
-            createHearts();
-            createPetals();
-            initYouTube();
-            
-            // دەستپێکردنی نوسینی نامەکە دوای 1.5 چرکە
-            setTimeout(() => {
-                typeMessage();
-            }, 1500);
-        });
-
-        // دووبارە بارکردنەوەی لاپەڕە بۆ ئەنیمەیشنەکان
-        window.addEventListener('beforeunload', () => {
-            // Cleanup
-        });
     </script>
 </body>
 </html>
