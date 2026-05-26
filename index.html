@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ckb" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>ڕۆژی لەدایکبوونت پیرۆز ❤️</title>
-  <!-- فۆنتی کوردی رەبەر (Rabar) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rabar:wght@400;700&display=swap" rel="stylesheet">
+  <title>جەژنت پیرۆز 💖 رەیان</title>
   <style>
     * {
       margin: 0;
@@ -16,200 +12,268 @@
     }
 
     body {
-      background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #03050a 100%);
-      height: 100vh;
-      overflow: hidden;
-      font-family: 'Rabar', 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #1a0b0b 0%, #2d1a1a 40%, #4a2323 100%);
+      min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-      direction: rtl;
+      align-items: center;
+      font-family: 'Segoe UI', 'Nizar', 'Rabar', 'Tahoma', sans-serif;
+      padding: 20px;
+      margin: 0;
       position: relative;
+      overflow-x: hidden;
     }
 
-    /* ئاسمانی ئەستێرەکان */
-    .stars {
+    /* ڕازاندنەوەی پێکەوە */
+    .hearts-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
     }
 
-    .star {
+    .heart {
       position: absolute;
-      background-color: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite alternate;
-      box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.6);
+      color: rgba(255, 180, 180, 0.25);
+      font-size: 28px;
+      user-select: none;
+      animation: floatUp 7s infinite ease-in;
+      opacity: 0;
     }
 
-    @keyframes twinkle {
-      0% { opacity: 0.3; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1.3); }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg) scale(0.8);
+        opacity: 0.7;
+      }
+      50% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(30deg) scale(1.4);
+        opacity: 0;
+      }
     }
 
-    /* کۆنتێنەری تێکست */
-    .message-container {
+    .card {
       position: relative;
       z-index: 10;
-      width: 90%;
-      max-width: 800px;
-      background: rgba(10, 20, 40, 0.5);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 150, 0.2);
+      background: rgba(20, 8, 8, 0.75);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(220, 160, 140, 0.45);
+      border-radius: 48px;
+      padding: 35px 30px 45px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7), 0 0 50px rgba(210, 120, 100, 0.4);
       text-align: center;
-      color: #f7e9c3;
-      border: 1px solid rgba(255, 255, 200, 0.2);
-      transition: all 0.5s ease;
+      color: #fbe9e7;
+      transition: all 0.4s ease;
     }
 
-    .typewriter-text {
+    .message-area {
       font-size: 1.7rem;
-      line-height: 2.2;
-      font-weight: 400;
-      color: #ffefcf;
-      text-shadow: 0 0 10px rgba(255, 200, 100, 0.6);
-      min-height: 120px;
-      word-break: break-word;
+      line-height: 2.4rem;
+      min-height: 180px;
       white-space: pre-wrap;
+      word-break: break-word;
+      color: #ffd9cc;
+      text-shadow: 0 0 12px #b34b3a;
+      font-weight: 400;
       letter-spacing: 0.5px;
-      transition: all 0.3s;
+      margin-bottom: 30px;
+      border-bottom: 1px dashed #c97b6b;
+      padding-bottom: 25px;
+      transition: all 0.2s;
     }
 
-    .big-final {
-      font-size: 5.5rem;
+    .special-dedication {
+      font-size: 2.6rem;
       font-weight: 700;
-      color: #e6b86a;
-      text-shadow: 0 0 25px #b8860b, 0 0 45px #ffbb2e;
-      margin-top: 0.8rem;
-      letter-spacing: 6px;
-      animation: gentleGlow 2.5s infinite alternate;
+      margin-top: 25px;
+      color: #ffb7a7;
+      text-shadow: 0 0 20px #e65c4b, 0 0 40px #b52e1b;
+      background: linear-gradient(to right, #ffd6cc, #ffaa8c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: glowPulse 2.2s infinite alternate;
+      letter-spacing: 1px;
+      line-height: 3.4rem;
       opacity: 0;
-      transition: opacity 1.5s ease;
-      line-height: 1.2;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease, transform 1s ease;
     }
 
-    .big-final.visible {
+    .special-dedication.show {
       opacity: 1;
+      transform: translateY(0);
     }
 
-    @keyframes gentleGlow {
-      0% { text-shadow: 0 0 20px #d49b3b, 0 0 35px #b57c1c; }
-      100% { text-shadow: 0 0 35px #f5c542, 0 0 60px #f0b323; }
+    @keyframes glowPulse {
+      0% {
+        text-shadow: 0 0 15px #c0452f, 0 0 35px #a1301f;
+      }
+      100% {
+        text-shadow: 0 0 30px #ff7b5c, 0 0 65px #e6391e;
+      }
     }
 
-    /* بۆ شاشە بچووکەکان */
-    @media (max-width: 600px) {
-      .typewriter-text {
-        font-size: 1.2rem;
-        line-height: 2;
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background: #ffb09c;
+      margin-right: 4px;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      height: 1.5em;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .reset-btn {
+      background: rgba(255, 230, 220, 0.2);
+      border: 1px solid #d69b8b;
+      color: #ffeae3;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+      font-family: inherit;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .reset-btn:hover {
+      background: rgba(190, 100, 80, 0.5);
+      border-color: #fca18d;
+      box-shadow: 0 0 25px #d94e3b;
+      color: white;
+    }
+
+    @media (max-width: 500px) {
+      .message-area {
+        font-size: 1.3rem;
+        line-height: 2rem;
       }
-      .big-final {
-        font-size: 3.5rem;
-      }
-      .message-container {
-        padding: 1.8rem 1rem;
+      .special-dedication {
+        font-size: 1.9rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- ئاسمانی ئەستێرەکان بە شێوەیەکی داینامیکی دروست دەکرێت -->
-  <div class="stars" id="starsContainer"></div>
+  <!-- دڵەکانی باکگراوند بۆ ئاشقانەبوون -->
+  <div class="hearts-container" id="heartsContainer"></div>
 
-  <div class="message-container" id="messageCard">
-    <div class="typewriter-text" id="typewriter"></div>
-    <div class="big-final" id="finalText">مەرگ جوان</div>
+  <div class="card">
+    <div class="message-area" id="typedMessage">
+      <span id="textContainer"></span><span class="cursor" id="cursorSpan"></span>
+    </div>
+
+    <!-- دەقی تایبەت کە دوای تەواوبوون دەردەکەوێت -->
+    <div class="special-dedication" id="specialText">
+      رەیانم شەکرە سێوەکەم مەرگ جوانی من
+    </div>
+
+    <button class="reset-btn" id="replayBtn">🔄 دووبارە بینینەوەی نامەکە</button>
   </div>
 
   <script>
     (function() {
-      // دروستکردنی ئەستێرەکان بە شێوەیەکی هەڕەمەکی
-      function createStars(count = 200) {
-        const container = document.getElementById('starsContainer');
-        container.innerHTML = '';
-        for (let i = 0; i < count; i++) {
-          const star = document.createElement('div');
-          star.className = 'star';
-          const size = Math.random() * 3.5 + 1.2; // قەبارە لە نێوان 1.2 بۆ 4.7
-          const x = Math.random() * 100;
-          const y = Math.random() * 100;
-          const duration = Math.random() * 4 + 2.5;
-          const delay = Math.random() * 3;
-          
-          star.style.width = `${size}px`;
-          star.style.height = `${size}px`;
-          star.style.left = `${x}%`;
-          star.style.top = `${y}%`;
-          star.style.animationDuration = `${duration}s`;
-          star.style.animationDelay = `${delay}s`;
-          
-          container.appendChild(star);
-        }
-      }
-
-      createStars(220); // دروستکردنی 220 ئەستێرە
-
-      // تێکستی تەواو بە پیتی کوردی (هەمان دەقی داواکراو)
-      const fullText = `سڵاو کەس و کارم هیوام وایە تەمەنت پر بێت لە خێرو بەرکەت سەرتا ئەم رۆژە لەخۆم پیرۆز پاشان لەتۆ نوری چاوم جەرجی سۆر نەم توانی بەم شێوازی خۆم دەمەوێت ئەم رۆژە بە نرخ هەلبسەنگێنم بەڵام ئەوندەی توانیم کۆمەڵە قسەیەک لە ناخی دڵمەوە بکەم بێ کۆپی کردنی تێکست ئیلاهی تەمەنت پر خێرو بەرکەت بکات بۆمن ئەتو ئەو هونەرمەندەی کە بە تێپەڕینی ساڵەکان پەیکەری ژیانی خۆت لە بەردی کات دەتاشیت با تاشینەکانت ورد و پڕ لە مانا بن پریان بکە لە فەرۆی مام خدری تا پێت بڵێم ئەم فەرزادەی ئیستا دەیناسی بە مانای کەلیمە بە تەواوی نەت ناسیووە چونکە نرخی شتانێک کە بە نرخن خودی خۆیان لای من دە ئەوندە بە نرخ ترن هیوادارم رۆژەکانی تری لەدایک بوونت لای من بێت ساڵەکانی ترت لای من بێت`;
-
-      const typewriterElement = document.getElementById('typewriter');
-      const finalElement = document.getElementById('finalText');
+      // نامە ڕاستەقینەکەت بە هەمان شێوەی داخواوت
+      const fullMessage = "چەژنت پیرۆز کەس و کارم ماڵەکەم رەیان جیان هیوادارم رۆژێک دابێت جەژن لەگەڵ من بەڕێبکەی و بەیانی کە لەخەو هەستام ماچی نیوچەوانت بکەم و پێت بلێم جەژن پیرۆز هاوسەرەکەم من نازانم قسەی نەستەلەق بکەم ئەمەوێت ئەوەی لە دڵمە ئەوانت پێ بڵێم داوا کارم لە خوای گەورەو میهرەبان ئە جەژنەت لۆ بکاتە هەزار جەژن بتگەینتە هەرچی خۆزگە و هیوای لە دڵتە پیكمان شاد بکات";
       
-      let index = 0;
-      let typewriterTimer = null;
+      const textContainer = document.getElementById('textContainer');
+      const cursorSpan = document.getElementById('cursorSpan');
+      const specialElement = document.getElementById('specialText');
+      const replayBtn = document.getElementById('replayBtn');
 
-      // دوای 2 چرکە دەست بە نوسین دەکات
-      function startTypewriterAfterDelay(delayMs = 2000) {
-        if (typewriterTimer) clearTimeout(typewriterTimer);
-        
-        typewriterTimer = setTimeout(() => {
-          // پاککردنەوەی هەر پێشوەختەیەک
-          typewriterElement.textContent = '';
-          index = 0;
-          // دەستپێکردنی نوسینی هێواش
-          typeNextCharacter();
-        }, delayMs);
-      }
+      let typingInterval = null;
+      let currentIndex = 0;
+      let animationActive = false;
 
-      function typeNextCharacter() {
-        if (index < fullText.length) {
-          // زیادکردنی پیتی داهاتوو
-          typewriterElement.textContent += fullText.charAt(index);
-          index++;
-          
-          // کاتی نێوان پیتەکان: 60-90 میلی چرکە بۆ هەستی سروشتی
-          const randomDelay = Math.floor(Math.random() * 35) + 55; // 55 تا 90 ms
-          typewriterTimer = setTimeout(typeNextCharacter, randomDelay);
-        } else {
-          // تێکست تەواو بوو، ئێستا "مەرگ جوان" بە گەورەیی پیشان بدە
-          finalElement.classList.add('visible');
-          // دوای تەواوبوونی نوسین، تایمەر ڕادەگرێت
-          if (typewriterTimer) clearTimeout(typewriterTimer);
-          typewriterTimer = null;
+      // دروستکردنی دڵە هەڵکشاوەکان بۆ جوانی
+      function createHearts() {
+        const container = document.getElementById('heartsContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < 28; i++) {
+          const heart = document.createElement('span');
+          heart.className = 'heart';
+          heart.innerHTML = ['❤️', '🌸', '✨', '💖', '🌙', '🕊️'][Math.floor(Math.random() * 6)];
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.animationDelay = Math.random() * 8 + 's';
+          heart.style.fontSize = (20 + Math.floor(Math.random() * 26)) + 'px';
+          heart.style.animationDuration = (5 + Math.random() * 9) + 's';
+          container.appendChild(heart);
         }
       }
 
-      // دڵنیابوون لەوەی کە لە سەرەتادا "مەرگ جوان" شاراوەیە
-      finalElement.classList.remove('visible');
+      // ڕاگرتنی هەموو شتێک
+      function stopTyping() {
+        if (typingInterval) {
+          clearInterval(typingInterval);
+          typingInterval = null;
+        }
+      }
 
-      // دەستپێکردنی پرۆسەکە دوای 2 چرکە
-      startTypewriterAfterDelay(2000);
+      // شاردنەوەی دەقی تایبەت و ریسێتکردن
+      function resetAndStart() {
+        stopTyping();
+        // شاردنەوەی دەقی خوارەوە
+        specialElement.classList.remove('show');
+        // پاککردنەوەی تێکست
+        textContainer.textContent = '';
+        currentIndex = 0;
+        animationActive = true;
+        // دڵنیابوون لەوەی کێرسۆر دیارە
+        cursorSpan.style.display = 'inline-block';
+        
+        // دەستپێکردنی تایپینگ
+        typingInterval = setInterval(typeNextCharacter, 55); // خێرایی پیت پیت (55ms)
+      }
 
-      // پاککردنەوەی تایمەر لە کاتی داخستنی پەڕە (خۆپارێزی)
-      window.addEventListener('beforeunload', () => {
-        if (typewriterTimer) clearTimeout(typewriterTimer);
+      // نووسینی پیتی داهاتوو
+      function typeNextCharacter() {
+        if (currentIndex < fullMessage.length) {
+          // زیادکردنی پیتی نوێ
+          textContainer.textContent += fullMessage.charAt(currentIndex);
+          currentIndex++;
+        } else {
+          // تەواو بوون
+          stopTyping();
+          animationActive = false;
+          // شاردنەوەی کێرسۆر
+          cursorSpan.style.display = 'none';
+          // پیشاندانی دەقی خوارەوە بە ئەنیمەیشن
+          specialElement.classList.add('show');
+        }
+      }
+
+      // دووبارەکردنەوە بە دوگمە
+      replayBtn.addEventListener('click', () => {
+        // ئەگەر ئەنیمەیشن چالاکە، یەکەم جار بیوەستێنە و دووبارە دەستپێبکە
+        stopTyping();
+        resetAndStart();
       });
 
-      // بۆ ئەوەی ئەگەر شاشە بچووک بێتەوە ئەستێرەکان دووبارە ڕێکبخەیت (ئارەزوومەندانە)
-      window.addEventListener('resize', () => {
-        // تەنها ئەستێرەکان دووبارە دروست دەکەینەوە بەڵام کاریگەری لەسەر تێکست نییە
-        createStars(220);
+      // دەستپێکردنی سەرەتا
+      createHearts();
+      resetAndStart();
+
+      // پاککردنەوە لەکاتی ڕۆیشتن (باشترە)
+      window.addEventListener('beforeunload', () => {
+        stopTyping();
       });
 
     })();
