@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="ckb">
+<html lang="ckb" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>بانگێشتی ئاهەنگی گواستنەوە</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بانگێشتی مارەکردن - فەرزاد و ڕەیان</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,419 +14,447 @@
         }
 
         body {
-            background-color: #0a0a0f;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 12px;
-            direction: rtl;
-        }
-
-        /* کارتی سەرەکی - شاز و ڕووناک */
-        .invitation-card {
-            max-width: 420px;
-            width: 100%;
-            background: linear-gradient(145deg, #1a1a2e, #16213e);
-            border-radius: 40px 40px 30px 30px;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 215, 0, 0.15);
+            background: #0a0a0a;
+            font-family: 'Tajawal', 'Playfair Display', serif;
             overflow: hidden;
-            position: relative;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
-        /* جلدی سەرەوە - وەک ڤیدیۆی ئینستاگرام */
-        .hero-section {
-            background: radial-gradient(circle at 30% 10%, #2a1f3d, #0d0d1a);
-            padding: 30px 20px 20px;
-            text-align: center;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        .container {
+            width: 400px;
+            height: 700px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 30px;
             position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(212, 175, 55, 0.1);
         }
 
-        .hero-section::after {
+        /* ذرات طلایی شناور */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, #d4af37 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(105%) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* حلقه طلایی مرکزی */
+        .rings-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+        }
+
+        .ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transform: translate(-50%, -50%);
+            animation: rotateRing 20s linear infinite;
+        }
+
+        .ring:nth-child(1) {
+            width: 280px;
+            height: 280px;
+            border-color: rgba(212, 175, 55, 0.3);
+            animation-duration: 20s;
+        }
+
+        .ring:nth-child(2) {
+            width: 240px;
+            height: 240px;
+            border-color: rgba(212, 175, 55, 0.2);
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+
+        .ring:nth-child(3) {
+            width: 320px;
+            height: 320px;
+            border-color: rgba(212, 175, 55, 0.15);
+            animation-duration: 30s;
+        }
+
+        @keyframes rotateRing {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* قلب */
+        .heart-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .heart {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        .heart::before,
+        .heart::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            width: 30px;
+            height: 48px;
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .heart::before {
+            left: 30px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart::after {
             left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #f9d976, #f39c12, #f9d976, transparent);
-            filter: blur(1px);
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
         }
 
-        .gold-icon {
-            font-size: 2.8rem;
-            margin-bottom: 8px;
-            display: block;
-            text-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
-            animation: shimmer 2s infinite alternate;
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+            75% {
+                transform: scale(1.15);
+            }
         }
 
-        @keyframes shimmer {
-            0% { text-shadow: 0 0 10px #f1c40f; }
-            100% { text-shadow: 0 0 30px #f39c12, 0 0 60px #e67e22; }
-        }
-
-        .main-title {
-            font-size: 2.1rem;
-            font-weight: 700;
-            color: #f9d976;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 15px rgba(243, 156, 18, 0.3);
-            line-height: 1.3;
-            margin-bottom: 6px;
-        }
-
-        .main-title span {
-            display: inline-block;
-            background: linear-gradient(45deg, #f9d976, #f39c12);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .sub-gold {
-            color: #e0c9a6;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            opacity: 0.9;
-            border-top: 1px dashed rgba(249, 217, 118, 0.3);
-            padding-top: 10px;
-            margin-top: 8px;
-        }
-
-        .names-highlight {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #fff;
-            background: linear-gradient(135deg, #f9d976, #f5b041);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(243, 156, 18, 0.2);
-            margin: 6px 0;
-            letter-spacing: 3px;
-        }
-
-        /* ناوەڕۆکی سەرەکی */
+        /* محتوای متن */
         .content {
-            padding: 22px 20px 16px;
-            color: #e8e0d0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            padding: 40px 20px;
         }
 
-        .invite-text {
-            font-size: 1.05rem;
-            line-height: 1.8;
+        .invitation-text {
+            color: #d4af37;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            margin-top: 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .names-container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 14px 12px;
-            border-radius: 20px;
-            border-right: 3px solid #f9d976;
-            border-left: 3px solid #f9d976;
-            margin-bottom: 18px;
-            backdrop-filter: blur(2px);
+            margin: 20px 0;
         }
 
-        .invite-text strong {
-            color: #f9d976;
+        .name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
             font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            opacity: 0;
+            animation: fadeInScale 1s ease forwards;
+            line-height: 1.4;
         }
 
-        .date-badge {
-            background: linear-gradient(135deg, #f9d976, #f5b041);
-            color: #1a1a2e;
-            font-size: 1.8rem;
-            font-weight: 800;
-            padding: 12px 18px;
-            border-radius: 60px;
+        .name-ferzad {
+            animation-delay: 1s;
+        }
+
+        .name-and {
+            font-size: 1.5rem;
+            color: #d4af37;
+            display: block;
+            margin: 5px 0;
+            opacity: 0;
+            animation: fadeInScale 1s ease forwards 1.5s;
+        }
+
+        .name-rayan {
+            animation-delay: 2s;
+        }
+
+        .separator {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 15px auto;
+            opacity: 0;
+            animation: expandLine 1s ease forwards 2.5s;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 80px;
+                opacity: 1;
+            }
+        }
+
+        .date-container {
             text-align: center;
-            display: inline-block;
-            width: auto;
-            margin: 10px auto 8px;
-            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.3);
-            letter-spacing: 2px;
-            border: 1px solid rgba(255, 215, 0, 0.4);
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 3s;
         }
 
         .date-label {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin: 6px 0 12px;
-        }
-
-        .date-label span {
-            background: rgba(249, 217, 118, 0.1);
-            padding: 4px 14px;
-            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
-            color: #e0c9a6;
-            border: 1px solid rgba(249, 217, 118, 0.2);
+            letter-spacing: 2px;
         }
 
-        /* ڕێنمایی خوارەوە - وەک ئەوەی ڤیدیۆکە */
-        .scroll-hint {
-            text-align: center;
-            margin: 18px 0 8px;
-            padding: 10px;
-            animation: bounce 2s infinite;
-            color: #f9d976;
-            font-size: 0.95rem;
-            border-top: 1px solid rgba(255, 215, 0, 0.1);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        .date-number {
+            color: #d4af37;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-top: 5px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .scroll-hint i {
-            display: inline-block;
-            margin-left: 8px;
-            font-size: 1.3rem;
-        }
-
-        /* پەڕەی دووەم - کە بە خوارەوە دەردەکەوێت */
-        .second-page {
-            background: linear-gradient(180deg, #0f0f1a, #1a1a2e);
-            padding: 24px 20px 30px;
-            border-top: 2px solid rgba(249, 217, 118, 0.2);
-            margin-top: 10px;
-            border-radius: 30px 30px 0 0;
-            box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .second-page h3 {
-            color: #f9d976;
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-            border-bottom: 1px dashed rgba(249, 217, 118, 0.2);
-            padding-bottom: 12px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 16px 0 20px;
-        }
-
-        .feature-item {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px 6px;
-            border-radius: 18px;
-            text-align: center;
-            border: 1px solid rgba(249, 217, 118, 0.1);
-            transition: 0.2s;
-            backdrop-filter: blur(4px);
+        .phrase {
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
-        }
-
-        .feature-item span {
-            display: block;
-            font-size: 1.8rem;
-            margin-bottom: 2px;
-        }
-
-        .feature-item strong {
-            color: #f9d976;
-            font-weight: 600;
-            font-size: 0.8rem;
-            display: block;
-        }
-
-        .qr-mock {
-            background: rgba(255, 215, 0, 0.05);
-            border-radius: 20px;
-            padding: 18px;
+            margin-top: 30px;
             text-align: center;
-            border: 1px dashed #f9d976;
-            margin: 16px 0 10px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 3.5s;
         }
 
-        .qr-mock span {
-            font-size: 3.2rem;
-            display: block;
-            margin-bottom: 4px;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .qr-mock p {
-            color: #aaa;
-            font-size: 0.8rem;
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .footer-link {
-            text-align: center;
-            margin-top: 18px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        /* گوشه‌های تزئینی */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-color: #d4af37;
+            border-style: solid;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 0.8s;
         }
 
-        .footer-link a {
-            color: #f9d976;
-            text-decoration: none;
-            font-weight: 600;
-            background: rgba(249, 217, 118, 0.1);
-            padding: 8px 22px;
-            border-radius: 40px;
-            display: inline-block;
-            border: 1px solid rgba(249, 217, 118, 0.2);
-            transition: 0.3s;
-            font-size: 0.9rem;
+        .corner-tl {
+            top: 30px;
+            left: 30px;
+            border-width: 2px 0 0 2px;
+            border-radius: 15px 0 0 0;
         }
 
-        .footer-link a:hover {
-            background: #f9d976;
-            color: #0a0a0f;
-            box-shadow: 0 0 30px rgba(243, 156, 18, 0.3);
+        .corner-tr {
+            top: 30px;
+            right: 30px;
+            border-width: 2px 2px 0 0;
+            border-radius: 0 15px 0 0;
         }
 
-        /* ڕەسپۆنسیڤ */
-        @media (max-width: 480px) {
-            .main-title { font-size: 1.7rem; }
-            .names-highlight { font-size: 1.5rem; }
-            .date-badge { font-size: 1.5rem; padding: 10px 14px; }
-            .feature-grid { gap: 8px; }
-            .feature-item { padding: 8px 4px; }
+        .corner-bl {
+            bottom: 30px;
+            left: 30px;
+            border-width: 0 0 2px 2px;
+            border-radius: 0 0 0 15px;
+        }
+
+        .corner-br {
+            bottom: 30px;
+            right: 30px;
+            border-width: 0 2px 2px 0;
+            border-radius: 0 0 15px 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.6;
+            }
+        }
+
+        /* درخشش مرکزی */
+        .glow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0.8;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="invitation-card">
+    <div class="container">
+        <!-- ذرات طلایی -->
+        <div class="particles" id="particles"></div>
 
-        <!-- پەڕەی یەکەم: سەرەتا -->
-        <div class="hero-section">
-            <span class="gold-icon">✨</span>
-            <div class="main-title">
-                <span>کۆمەڵگەی گەشتیاری</span><br>
-                رووپەسەند
-            </div>
-            <div class="sub-gold">
-                ئیمە بانگێشتتان دەکەین بۆ
-            </div>
-            <div class="names-highlight">
-                قەفەزی (فەرزاد) & (رەیان)
-            </div>
-            <div style="margin-top: 4px; color: #e0c9a6; font-size: 0.9rem; border-top: 1px solid rgba(255,215,0,0.1); padding-top: 8px;">
-                🎉 ئاهەنگی گواستنەوە
-            </div>
+        <!-- درخشش مرکزی -->
+        <div class="glow-center"></div>
+
+        <!-- حلقه‌ها -->
+        <div class="rings-container">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
         </div>
 
+        <!-- قلب -->
+        <div class="heart-container">
+            <div class="heart"></div>
+        </div>
+
+        <!-- گوشه‌های تزئینی -->
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <!-- محتوا -->
         <div class="content">
-            <div class="invite-text">
-                <strong>💫 ئیمە بانگێشتتان دەکەین</strong> بۆ کۆمەلگەی گەشتیاری رووپەسەند بە مەبستی چوونە ناو قەفەزی <strong>(فەرزاد)</strong> و <strong>(رەیان)</strong> لە ڕێگەی ئەم بانگێشتە دیجیتاڵییە نوێیەوە.
+            <p class="invitation-text">✦ بەخێربێن ✦</p>
+            <div class="names-container">
+                <span class="name name-ferzad">فەرزاد</span>
+                <span class="name-and">&</span>
+                <span class="name name-rayan">ڕەیان</span>
             </div>
-
-            <div class="date-label">
-                <span>📅 بەروار</span>
-                <span>⏰ کات</span>
+            <div class="separator"></div>
+            <div class="date-container">
+                <p class="date-label">ڕێکەوتی مارەکردن</p>
+                <p class="date-number">12 / 12 / 2026</p>
             </div>
-            <div style="text-align: center;">
-                <div class="date-badge">
-                    12 / 12 / 2026
-                </div>
-                <div style="color: #b8a88a; font-size: 0.85rem; margin-top: 6px; letter-spacing: 1px;">
-                    شەممە · کاتژمێر ٦:٣٠ ئێوارە
-                </div>
-            </div>
-
-            <!-- ئاماژەی خوارەوە بۆ پەڕەی دووەم -->
-            <div class="scroll-hint">
-                <i>👇</i> بۆ بینینی وردەکارییەکان و هەستکردن بە ئەزموونەکە، لاپەرەکە بخەرە خوارەوە <i>👇</i>
-            </div>
-        </div>
-
-        <!-- پەڕەی دووەم: وردەکاری و هەست (هاوشێوەی ڤیدیۆکە) -->
-        <div class="second-page" id="secondPage">
-            <h3>✨ ئەزموونی تایبەت</h3>
-
-            <div class="feature-grid">
-                <div class="feature-item">
-                    <span>📍</span>
-                    <strong>ناوچە</strong>
-                    شوێنی تایبەت
-                </div>
-                <div class="feature-item">
-                    <span>🎵</span>
-                    <strong>مۆسیقا</strong>
-                    بەرنامەی تایبەت
-                </div>
-                <div class="feature-item">
-                    <span>📸</span>
-                    <strong>گالەری</strong>
-                    وێنە و ڤیدیۆ
-                </div>
-                <div class="feature-item">
-                    <span>💌</span>
-                    <strong>پەیامی تایبەت</strong>
-                    بۆ میوانان
-                </div>
-            </div>
-
-            <div class="qr-mock">
-                <span>🔗</span>
-                <p>لینک و QR Code بۆ هاوبەشکردن لە</p>
-                <div style="display: flex; justify-content: center; gap: 12px; margin: 8px 0; font-size: 1.8rem;">
-                    <span>📱</span> <span>💬</span> <span>📲</span>
-                </div>
-                <p style="font-size: 0.7rem; opacity: 0.7;">WhatsApp · Telegram · Instagram</p>
-            </div>
-
-            <div class="footer-link">
-                <a href="#" onclick="alert('ئەمە نموونەیەکە بۆ بانگێشتی تایبەت. ئەزموونە ڕاستەقینەکە لە ڕێگەی لینکە تایبەتەکەوە دەبێت.')">
-                    🎁 بینینی هەموو تایبەتمەندییەکان
-                </a>
-            </div>
-
-            <div style="text-align: center; margin-top: 18px; color: #6a5e4a; font-size: 0.7rem; border-top: 1px solid rgba(255,215,0,0.05); padding-top: 14px;">
-                ✨ دیزاین کراوە بۆ کۆمەڵگەی گەشتیاری رووپەسەند · ھەموو مافەکان پارێزراوە
-            </div>
+            <p class="phrase">
+                بەخێربێن بۆ ئاهەنگی<br>
+                مارەکردنی یەکگرتنی دوو دڵ<br>
+                بە ئامادەبوونی ئێوە پیرۆز دەبێت
+            </p>
         </div>
     </div>
 
     <script>
-        // بۆ ڕێزگرتن لە هەستی بینەر و دروستکردنی کاریگەرییەکی نەرم
-        document.addEventListener('DOMContentLoaded', function() {
-            // زیادکردنی کاریگەری تایبەت بۆ کارتەکە
-            const card = document.querySelector('.invitation-card');
-            card.addEventListener('mouseenter', function() {
-                this.style.boxShadow = '0 30px 60px -10px rgba(243, 156, 18, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.2)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.boxShadow = '0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 215, 0, 0.15)';
-            });
+        // ایجاد ذرات طلایی شناور
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 40;
 
-            // کاریگەری سکرۆڵکردنی نەرم بۆ گەیشتن بە پەڕەی دووەم
-            const scrollHint = document.querySelector('.scroll-hint');
-            if (scrollHint) {
-                scrollHint.addEventListener('click', function() {
-                    document.getElementById('secondPage').scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                });
-            }
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
 
-            // زیادکردنی کاریگەری ڕووناکی لەسەر ناوەکان
-            const names = document.querySelector('.names-highlight');
-            if (names) {
-                setInterval(() => {
-                    names.style.textShadow = '0 0 20px rgba(243, 156, 18, 0.4)';
-                    setTimeout(() => {
-                        names.style.textShadow = '0 0 40px rgba(243, 156, 18, 0.1)';
-                    }, 400);
-                }, 1200);
-            }
-        });
+            const size = Math.random() * 4 + 1;
+            const leftPosition = Math.random() * 100;
+            const delay = Math.random() * 15;
+            const duration = Math.random() * 10 + 8;
+
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = leftPosition + '%';
+            particle.style.animationDelay = delay + 's';
+            particle.style.animationDuration = duration + 's';
+
+            particlesContainer.appendChild(particle);
+        }
+
+        // افزودن درخشش تصادفی به نام‌ها
+        setInterval(() => {
+            const names = document.querySelectorAll('.name');
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            randomName.style.textShadow = '0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(255, 215, 0, 0.5)';
+            setTimeout(() => {
+                randomName.style.textShadow = '0 0 30px rgba(212, 175, 55, 0.5)';
+            }, 500);
+        }, 3000);
     </script>
-
 </body>
 </html>
