@@ -1,460 +1,294 @@
 <!DOCTYPE html>
-<html lang="ckb" dir="rtl">
+<html lang="ku" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بانگێشتی مارەکردن - فەرزاد و ڕەیان</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<title>فەرزاد ❤️ رەیان</title>
 
-        body {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #0a0a0a;
-            font-family: 'Tajawal', 'Playfair Display', serif;
-            overflow: hidden;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
 
-        .container {
-            width: 400px;
-            height: 700px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            border-radius: 30px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(212, 175, 55, 0.1);
-        }
+<style>
 
-        /* ذرات طلایی شناور */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Cairo',sans-serif;
+}
 
-        .particle {
-            position: absolute;
-            background: radial-gradient(circle, #d4af37 0%, transparent 70%);
-            border-radius: 50%;
-            animation: floatParticle linear infinite;
-            opacity: 0;
-        }
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#f8d7ff,#d9e8ff);
+}
 
-        @keyframes floatParticle {
-            0% {
-                transform: translateY(105%) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-10%) scale(1.5);
-                opacity: 0;
-            }
-        }
+.container{
+position:relative;
+perspective:1500px;
+}
 
-        /* حلقه طلایی مرکزی */
-        .rings-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
-        }
+.envelope{
+width:340px;
+height:230px;
+position:relative;
+cursor:pointer;
+transform-style:preserve-3d;
+transition:1.2s;
+}
 
-        .ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            transform: translate(-50%, -50%);
-            animation: rotateRing 20s linear infinite;
-        }
+.back{
+position:absolute;
+width:100%;
+height:100%;
+background:#ff8fa3;
+border-radius:10px;
+overflow:hidden;
+}
 
-        .ring:nth-child(1) {
-            width: 280px;
-            height: 280px;
-            border-color: rgba(212, 175, 55, 0.3);
-            animation-duration: 20s;
-        }
+.back:before{
+content:'';
+position:absolute;
+width:100%;
+height:100%;
+background:#ff6f91;
+clip-path:polygon(0 0,50% 50%,100% 0);
+}
 
-        .ring:nth-child(2) {
-            width: 240px;
-            height: 240px;
-            border-color: rgba(212, 175, 55, 0.2);
-            animation-duration: 25s;
-            animation-direction: reverse;
-        }
+.front{
+position:absolute;
+width:100%;
+height:100%;
+background:#ff4d6d;
+clip-path:polygon(0 0,100% 0,50% 55%);
+transform-origin:top;
+transition:1s;
+z-index:10;
+}
 
-        .ring:nth-child(3) {
-            width: 320px;
-            height: 320px;
-            border-color: rgba(212, 175, 55, 0.15);
-            animation-duration: 30s;
-        }
+.letter{
+position:absolute;
+left:5%;
+top:5%;
+width:90%;
+height:90%;
+background:white;
+border-radius:10px;
+padding:20px;
+overflow:hidden;
+transform:translateY(40px);
+transition:1.2s;
+z-index:2;
+box-shadow:0 10px 20px rgba(0,0,0,.2);
+}
 
-        @keyframes rotateRing {
-            from {
-                transform: translate(-50%, -50%) rotate(0deg);
-            }
-            to {
-                transform: translate(-50%, -50%) rotate(360deg);
-            }
-        }
+.open .front{
+transform:rotateX(-180deg);
+}
 
-        /* قلب */
-        .heart-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-        }
+.open .letter{
+transform:translateY(-120px);
+height:470px;
+}
 
-        .heart {
-            width: 60px;
-            height: 60px;
-            position: relative;
-            animation: heartbeat 1.2s ease-in-out infinite;
-        }
+h1{
+font-size:30px;
+text-align:center;
+color:#ff4d6d;
+margin-bottom:15px;
+}
 
-        .heart::before,
-        .heart::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 48px;
-            background: linear-gradient(135deg, #d4af37, #ffd700);
-            border-radius: 30px 30px 0 0;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-        }
+#text{
+font-size:20px;
+line-height:2;
+text-align:center;
+white-space:pre-wrap;
+color:#444;
+}
 
-        .heart::before {
-            left: 30px;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
-        }
+.hearts{
+position:absolute;
+width:100%;
+height:100%;
+pointer-events:none;
+overflow:hidden;
+}
 
-        .heart::after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
-        }
+.heart{
+position:absolute;
+bottom:-20px;
+font-size:22px;
+animation:fly 6s linear infinite;
+opacity:.8;
+}
 
-        @keyframes heartbeat {
-            0%, 100% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(1.1);
-            }
-            50% {
-                transform: scale(1);
-            }
-            75% {
-                transform: scale(1.15);
-            }
-        }
+@keyframes fly{
 
-        /* محتوای متن */
-        .content {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-            padding: 40px 20px;
-        }
+0%{
+transform:translateY(0) scale(.5);
+opacity:0;
+}
 
-        .invitation-text {
-            color: #d4af37;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            margin-top: 60px;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards 0.5s;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
+20%{
+opacity:1;
+}
 
-        .names-container {
-            text-align: center;
-            margin: 20px 0;
-        }
+100%{
+transform:translateY(-110vh) scale(1.5);
+opacity:0;
+}
 
-        .name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-            opacity: 0;
-            animation: fadeInScale 1s ease forwards;
-            line-height: 1.4;
-        }
+}
 
-        .name-ferzad {
-            animation-delay: 1s;
-        }
-
-        .name-and {
-            font-size: 1.5rem;
-            color: #d4af37;
-            display: block;
-            margin: 5px 0;
-            opacity: 0;
-            animation: fadeInScale 1s ease forwards 1.5s;
-        }
-
-        .name-rayan {
-            animation-delay: 2s;
-        }
-
-        .separator {
-            width: 80px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #d4af37, transparent);
-            margin: 15px auto;
-            opacity: 0;
-            animation: expandLine 1s ease forwards 2.5s;
-        }
-
-        @keyframes expandLine {
-            from {
-                width: 0;
-                opacity: 0;
-            }
-            to {
-                width: 80px;
-                opacity: 1;
-            }
-        }
-
-        .date-container {
-            text-align: center;
-            margin-top: 15px;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards 3s;
-        }
-
-        .date-label {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-        }
-
-        .date-number {
-            color: #d4af37;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: 5px;
-            margin-top: 5px;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .phrase {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-top: 30px;
-            text-align: center;
-            line-height: 1.8;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards 3.5s;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* گوشه‌های تزئینی */
-        .corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-color: #d4af37;
-            border-style: solid;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 0.8s;
-        }
-
-        .corner-tl {
-            top: 30px;
-            left: 30px;
-            border-width: 2px 0 0 2px;
-            border-radius: 15px 0 0 0;
-        }
-
-        .corner-tr {
-            top: 30px;
-            right: 30px;
-            border-width: 2px 2px 0 0;
-            border-radius: 0 15px 0 0;
-        }
-
-        .corner-bl {
-            bottom: 30px;
-            left: 30px;
-            border-width: 0 0 2px 2px;
-            border-radius: 0 0 0 15px;
-        }
-
-        .corner-br {
-            bottom: 30px;
-            right: 30px;
-            border-width: 0 2px 2px 0;
-            border-radius: 0 0 15px 0;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 0.6;
-            }
-        }
-
-        /* درخشش مرکزی */
-        .glow-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: glowPulse 3s ease-in-out infinite;
-            z-index: 1;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.5;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.3);
-                opacity: 0.8;
-            }
-        }
-    </style>
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- ذرات طلایی -->
-        <div class="particles" id="particles"></div>
 
-        <!-- درخشش مرکزی -->
-        <div class="glow-center"></div>
+<div class="hearts"></div>
 
-        <!-- حلقه‌ها -->
-        <div class="rings-container">
-            <div class="ring"></div>
-            <div class="ring"></div>
-            <div class="ring"></div>
-        </div>
+<div class="container">
 
-        <!-- قلب -->
-        <div class="heart-container">
-            <div class="heart"></div>
-        </div>
+<div class="envelope" id="env">
 
-        <!-- گوشه‌های تزئینی -->
-        <div class="corner corner-tl"></div>
-        <div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
+<div class="back"></div>
 
-        <!-- محتوا -->
-        <div class="content">
-            <p class="invitation-text">✦ بەخێربێن ✦</p>
-            <div class="names-container">
-                <span class="name name-ferzad">فەرزاد</span>
-                <span class="name-and">&</span>
-                <span class="name name-rayan">ڕەیان</span>
-            </div>
-            <div class="separator"></div>
-            <div class="date-container">
-                <p class="date-label">ڕێکەوتی مارەکردن</p>
-                <p class="date-number">12 / 12 / 2026</p>
-            </div>
-            <p class="phrase">
-                بەخێربێن بۆ ئاهەنگی<br>
-                مارەکردنی یەکگرتنی دوو دڵ<br>
-                بە ئامادەبوونی ئێوە پیرۆز دەبێت
-            </p>
-        </div>
-    </div>
+<div class="front"></div>
 
-    <script>
-        // ایجاد ذرات طلایی شناور
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = 40;
+<div class="letter">
 
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
+<h1>💍 بانگهێشت</h1>
 
-            const size = Math.random() * 4 + 1;
-            const leftPosition = Math.random() * 100;
-            const delay = Math.random() * 15;
-            const duration = Math.random() * 10 + 8;
+<div id="text"></div>
 
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = leftPosition + '%';
-            particle.style.animationDelay = delay + 's';
-            particle.style.animationDuration = duration + 's';
+</div>
 
-            particlesContainer.appendChild(particle);
-        }
+</div>
 
-        // افزودن درخشش تصادفی به نام‌ها
-        setInterval(() => {
-            const names = document.querySelectorAll('.name');
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            randomName.style.textShadow = '0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(255, 215, 0, 0.5)';
-            setTimeout(() => {
-                randomName.style.textShadow = '0 0 30px rgba(212, 175, 55, 0.5)';
-            }, 500);
-        }, 3000);
-    </script>
+</div>
+
+<script>
+
+const env=document.getElementById("env");
+
+env.onclick=()=>{
+
+env.classList.add("open");
+
+write();
+
+}
+
+const message=`
+
+بە ناوی خوای گەورە
+
+بە دڵێکی پڕ لە خۆشی
+
+بانگهێشتتان دەکەین بۆ
+بەشداریکردن لە مارەبڕینی
+
+🤍
+
+فەرزاد
+❤️
+رەیان
+
+📅 12/12/2026
+
+🕓 4 ئێوارە
+
+📍 کۆمەڵگەی رووپەسەند
+
+ئامادەبوونی ئێوە
+مایەی خۆشی ئێمەیە ❤️
+
+`;
+
+let i=0;
+
+function write(){
+
+const box=document.getElementById("text");
+
+const timer=setInterval(()=>{
+
+box.innerHTML+=message.charAt(i);
+
+i++;
+
+if(i>=message.length){
+
+clearInterval(timer);
+
+}
+
+},40);
+
+}function createHeart(){
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+
+heart.innerHTML="❤";
+
+heart.style.left=Math.random()*100+"%";
+
+heart.style.fontSize=(20+Math.random()*30)+"px";
+
+heart.style.animationDuration=(4+Math.random()*4)+"s";
+
+document.querySelector(".hearts").appendChild(heart);
+
+setTimeout(()=>{
+
+heart.remove();
+
+},8000);
+
+}
+
+setInterval(createHeart,300);
+
+for(let i=0;i<25;i++){
+
+setTimeout(createHeart,i*200);
+
+}
+
+document.body.addEventListener("mousemove",(e)=>{
+
+const h=document.createElement("div");
+
+h.className="heart";
+
+h.innerHTML="💖";
+
+h.style.left=e.clientX+"px";
+
+h.style.top=e.clientY+"px";
+
+h.style.position="fixed";
+
+h.style.fontSize="18px";
+
+h.style.animation="fly 4s linear forwards";
+
+document.body.appendChild(h);
+
+setTimeout(()=>{
+
+h.remove();
+
+},4000);
+
+});
+
+</script>
+
 </body>
 </html>
